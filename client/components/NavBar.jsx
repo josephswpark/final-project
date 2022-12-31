@@ -6,33 +6,36 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import StyledBadge from '@mui/material/Badge';
 import { Container } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Image from '../../server/public/home-image.jpeg';
+import Logo from '../../server/public/black-logo.svg';
 
 const styles = {
-  paperContainer: {
-    backgroundImage: `url(${Image})`
+  navBar: {
+    paddingTop: 22
+  },
+  logoSize: {
+    width: 170
   }
 };
 
 export default class HelloWorld extends React.Component {
   render() {
     return (
-      <Paper style={styles.paperContainer}>
-
-        <Container maxWidth='lg'>
-          <Grid container direction="row" justifyContent="right" alignItems='center'>
+      <Container max-width='lg' style={styles.navBar}>
+        <Grid container direction="row">
+          <Grid item xs={7.5}>
+            <img src={Logo} width={180} className='logo-img'/>
+          </Grid>
+          <Grid container direction='row' justifyContent='right' alignItems='center' item xs={4.5} className='icon-menu' >
             <IconButton aria-label='search' href='#'><SearchIcon /></IconButton>
             <IconButton aria-label="cart">
-              <StyledBadge badgeContent={4} color="primary">
+              <StyledBadge badgeConten='' color="primary">
                 <ShoppingBagIcon />
               </StyledBadge>
             </IconButton>
             <IconButton aria-label='shop' href='#'><StoreIcon /></IconButton>
           </Grid>
-        </Container>
-
-      </Paper>
+        </Grid>
+      </Container>
     );
   }
 }
