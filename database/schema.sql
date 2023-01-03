@@ -23,13 +23,9 @@ CREATE TABLE "public"."users" (
 
 CREATE TABLE "public"."orders" (
 	"orderId" serial NOT NULL,
-	"userId" integer NOT NULL,
-	"cartItemsId" integer NOT NULL,
 	"cartId" integer NOT NULL,
+	"userId" integer NOT NULL,
 	"totalCost" integer NOT NULL,
-	"skuId" TEXT NOT NULL,
-	"size" TEXT NOT NULL,
-	"cartCount" serial NOT NULL,
 	"purchasedTime" timestamp with time zone NOT NULL,
 	CONSTRAINT "orders_pk" PRIMARY KEY ("orderId")
 ) WITH (
@@ -39,23 +35,22 @@ CREATE TABLE "public"."orders" (
 
 
 CREATE TABLE "public"."shoes" (
-	"skuId" TEXT NOT NULL,
+	"productId" integer NOT NULL,
+	"sku" TEXT NOT NULL UNIQUE,
 	"name" TEXT NOT NULL,
 	"price" integer NOT NULL,
 	"imageUrl" TEXT NOT NULL,
 	"brand" TEXT NOT NULL,
-	CONSTRAINT "shoes_pk" PRIMARY KEY ("skuId")
+	CONSTRAINT "shoes_pk" PRIMARY KEY ("productId")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-CREATE TABLE "public"."inventory" (
-	"inventoryId" serial NOT NULL,
-	"size" TEXT NOT NULL,
-	"skuId" TEXT NOT NULL,
-	CONSTRAINT "inventory_pk" PRIMARY KEY ("inventoryId")
+CREATE TABLE "public"."sizes" (
+	"productId" integer NOT NULL,
+	"size" TEXT NOT NULL
 ) WITH (
   OIDS=FALSE
 );
@@ -63,13 +58,10 @@ CREATE TABLE "public"."inventory" (
 
 
 CREATE TABLE "public"."cartItems" (
-	"cartItemsId" serial NOT NULL,
-	"skuId" TEXT NOT NULL,
-	"size" TEXT NOT NULL,
-	"cartCount" serial NOT NULL,
-	"cartId" serial NOT NULL,
-	"inventoryId" integer NOT NULL,
-	CONSTRAINT "cartItems_pk" PRIMARY KEY ("cartItemsId")
+	"cartId" integer NOT NULL UNIQUE,
+	"productId" int NOT NULL UNIQUE,
+	"quantity" integer NOT NULL,
+	"size" TEXT NOT NULL
 ) WITH (
   OIDS=FALSE
 );
@@ -79,7 +71,6 @@ CREATE TABLE "public"."cartItems" (
 CREATE TABLE "public"."cart" (
 	"cartId" serial NOT NULL,
 	"purchased" BOOLEAN NOT NULL,
-	"userId" integer NOT NULL,
 	CONSTRAINT "cart_pk" PRIMARY KEY ("cartId")
 ) WITH (
   OIDS=FALSE
@@ -88,15 +79,14 @@ CREATE TABLE "public"."cart" (
 
 
 CREATE TABLE "public"."usersAddress" (
-	"userId" serial NOT NULL,
+	"userId" integer NOT NULL,
 	"firstName" TEXT NOT NULL,
 	"lastName" TEXT NOT NULL,
 	"address" TEXT NOT NULL,
 	"address2" TEXT NOT NULL,
 	"city" TEXT NOT NULL,
 	"state" TEXT NOT NULL,
-	"zipCode" TEXT NOT NULL,
-	CONSTRAINT "usersAddress_pk" PRIMARY KEY ("userId")
+	"zipCode" TEXT NOT NULL
 ) WITH (
   OIDS=FALSE
 );
@@ -104,18 +94,14 @@ CREATE TABLE "public"."usersAddress" (
 
 
 
-ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
-ALTER TABLE "orders" ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cartItemsId") REFERENCES "cartItems"("cartItemsId");
-ALTER TABLE "orders" ADD CONSTRAINT "orders_fk2" FOREIGN KEY ("cartId") REFERENCES "cart"("cartId");
--- ALTER TABLE "orders" ADD CONSTRAINT "orders_fk3" FOREIGN KEY ("cartCount") REFERENCES "cartItems"("cartCount");
+ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("cartId") REFERENCES "cart"("cartId");
+ALTER TABLE "orders" ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
 
-ALTER TABLE "inventory" ADD CONSTRAINT "inventory_fk0" FOREIGN KEY ("skuId") REFERENCES "shoes"("skuId");
+ALTER TABLE "sizes" ADD CONSTRAINT "sizes_fk0" FOREIGN KEY ("productId") REFERENCES "shoes"("productId");
 
-ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk0" FOREIGN KEY ("skuId") REFERENCES "shoes"("skuId");
-ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk1" FOREIGN KEY ("cartId") REFERENCES "cart"("cartId");
-ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk2" FOREIGN KEY ("inventoryId") REFERENCES "inventory"("inventoryId");
+ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk0" FOREIGN KEY ("cartId") REFERENCES "cart"("cartId");
+ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk1" FOREIGN KEY ("productId") REFERENCES "shoes"("productId");
 
-ALTER TABLE "cart" ADD CONSTRAINT "cart_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
 ALTER TABLE "usersAddress" ADD CONSTRAINT "usersAddress_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");

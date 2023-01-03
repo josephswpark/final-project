@@ -22,7 +22,8 @@ const db = new pg.Pool({
 
 app.get('/api/shoes', (req, res, next) => {
   const sql = `
-  select "skuId",
+  select "productId",
+          "sku",
           "name",
           "price",
           "imageUrl",
@@ -37,20 +38,22 @@ app.get('/api/shoes', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/shoes/:id', (req, res, next) => {
+app.get('/api/shoes/:productId', (req, res, next) => {
   const sql = `
-    select "skuId",
+    select "productId",
+          "sku",
           "name",
           "price",
           "imageUrl",
-          "brand"
+          "brand",
+          "size"
     from "shoes"
-    join "sizes" using ("skuId")
-    where "inventoryId" = $1
-    group by "sizes"
+    join "sizes" using ("productId")
+    where "productId" = $1
   `;
 
-  const params = [Number(req.params.id)];
+  const params = [Number(req.params.productId)];
+
   db.query(sql, params)
     .then(result => {
       const product = result.rows[0];
