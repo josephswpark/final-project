@@ -1,10 +1,24 @@
 import React from 'react';
-import HelloWorld from '../components/hello-world';
+import NavBar from '../components/NavBar';
+import Paper from '@mui/material/Paper';
+import Image from '../../server/public/home-image.jpeg';
 
-export default function Home(props) {
-  return (
-    <div>
-      <HelloWorld />
-    </div>
-  );
+const styles = {
+  paperContainer: {
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    height: '100vh',
+    backgroundImage: `url(${Image})`
+  }
+};
+
+export default class Home extends React.Component {
+  render() {
+    return (
+      <Paper style={styles.paperContainer}>
+        <NavBar />
+      </Paper>
+    );
+  }
 }
