@@ -1,0 +1,37 @@
+body {
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+  font-family: eczar;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input:checked ~ span {
+  font-weight: bold;
+}
+
+.size {
+  cursor: pointer;
+}
+
+label {
+  padding: 7px 16.5px;
+  border: 1px solid lightgrey;
+  cursor: pointer;
+  margin-right: 0.3rem;
+  border-radius: 5px;
+}
+
+label:hover {
+  background: #ddd;
+}
+
+ul {
+  padding-left: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+li {
+  line-height: 0.8;
+}
