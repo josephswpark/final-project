@@ -2,6 +2,7 @@ import React from 'react';
 import Home from './pages/home';
 import Products from './pages/products';
 import parseRoute from './lib/parse-route';
+import ProductDetails from './pages/product-details';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -30,6 +31,10 @@ export default class App extends React.Component {
     }
     if (path === 'products') {
       return <Products />;
+    }
+    if (path === 'product') {
+      const productId = route.params.get('product');
+      return <ProductDetails productId={productId}/>;
     }
   }
 

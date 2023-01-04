@@ -46,10 +46,11 @@ app.get('/api/shoes/:productId', (req, res, next) => {
           "price",
           "imageUrl",
           "brand",
-          "size"
+          array_agg("size") as sizes
     from "shoes"
     join "sizes" using ("productId")
     where "productId" = $1
+    group by "productId"
   `;
 
   const params = [Number(req.params.productId)];
