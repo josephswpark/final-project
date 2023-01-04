@@ -50,7 +50,7 @@ CREATE TABLE "public"."shoes" (
 
 CREATE TABLE "public"."sizes" (
 	"productId" integer NOT NULL,
-	"size" TEXT NOT NULL
+	"size" NUMERIC NOT NULL
 ) WITH (
   OIDS=FALSE
 );

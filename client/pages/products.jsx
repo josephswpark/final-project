@@ -3,7 +3,6 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Container from '@mui/material/Container';
-import ListItemButton from '@mui/material/ListItemButton';
 import Image from '../../server/public/shop-img.jpeg';
 import Paper from '@mui/material/Paper';
 import NavBar from '../components/NavBar';
@@ -13,7 +12,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    height: '50vh',
+    height: '40vh',
     backgroundImage: `url(${Image})`
   },
   shopAll: {
@@ -45,7 +44,6 @@ export default class Products extends React.Component {
 
   render() {
     const productList = this.state.products;
-
     return (
       <>
         <Paper style={styles.paperContainer}>
@@ -54,15 +52,15 @@ export default class Products extends React.Component {
         </Paper>
 
         <Container maxWidth='lg'>
-          <ListItemButton ref={`#product?product=${productList.productId}`} >
-            <ImageList style={{ gap: 20 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
-              {productList.map(item => (
-                <ImageListItem key={item.img} style={styles.allProduct} >
+
+          <ImageList style={{ gap: 20 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
+            {productList.map(item => (
+              <a href={`#product?product=${item.productId}`} key={productList.productId} style={{ textDecoration: 'none', color: 'black' }} >
+                <ImageListItem key={item.img} >
                   <img style={{ cursor: 'pointer' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
-                  loading="lazy"
                 />
                   <ImageListItemBar style={styles.productStyle}
                   title={item.name}
@@ -70,9 +68,9 @@ export default class Products extends React.Component {
                   position="below"
                 />
                 </ImageListItem>
-              ))}
-            </ImageList>
-          </ListItemButton>
+              </a>
+            ))}
+          </ImageList>
         </Container>
       </>
     );
