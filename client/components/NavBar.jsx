@@ -8,7 +8,6 @@ import StyledBadge from '@mui/material/Badge';
 import { Container } from '@mui/material';
 import Logo from '../../server/public/white-logo.svg';
 import Button from '@mui/material/Button';
-import CartModal from './cart-modal';
 
 const styles = {
   navBar: {
@@ -30,8 +29,8 @@ export default class NavBar extends React.Component {
           </Grid>
           <Grid container direction='row' justifyContent='right' alignItems='center' item xs={4.5} className='icon-menu' >
             <IconButton aria-label='search' href='#search'><SearchIcon sx={{ color: 'white' }} /></IconButton>
-            <IconButton aria-label="cart" modal={<CartModal/>}>
-              <StyledBadge badgeConten='' color="primary">
+            <IconButton aria-label="cart" href='#cart'>
+              <StyledBadge badgeContent={this.props.qty} color="primary">
                 <ShoppingBagIcon sx={{ color: 'white' }}/>
               </StyledBadge>
             </IconButton>

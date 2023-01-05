@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { createTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import CartModal from '../components/cart-modal';
-// import jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 const theme = createTheme({
   palette: {
@@ -48,24 +48,27 @@ export default class ProductDetails extends React.Component {
       loading: true,
       size: null,
       isOpen: false,
-      cart: null,
-      quantity: 1
+      quantity: 0,
+      cart: null
     };
     this.sizes = this.sizes.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.addToCart = this.addToCart.bind(this);
+    this.updateQty = this.updateQty.bind(this);
   }
 
   componentDidMount() {
+
     fetch(`/api/shoes/${this.props.productId}`)
       .then(res => res.json())
       .then(product => this.setState({ product, loading: false }))
       .catch(err => console.error(err));
-    // const token = window.localStorage.getItem('token');
-    // const tokenStored = token ? jwtDecode(token) : null;
-    this.setState({ cart: this.state.product });
+    const token = window.localStorage.getItem('token');
+    const tokenStored = token ? jwtDecode(token) : null;
+    this.setState({ cart: tokenStored });
+
   }
 
   handleChange(event) {
@@ -108,11 +111,17 @@ export default class ProductDetails extends React.Component {
         })
           .then(res => res.json())
           .then(res => {
-            window.localStorage.setItem('token', res.token);
+            // window.localStorage.setItem('token', res.token);
             this.openModal();
           })
           .catch(err => console.error(err));
       }
+    }
+  }
+
+  updateQty(event) {
+    if (event.target.className.includes('MuiButtonBase-root')) {
+      this.setState(prevState => ({ quantity: prevState.quantity + 1 }));
     }
   }
 
@@ -139,33 +148,33 @@ export default class ProductDetails extends React.Component {
   }
 
   render() {
-
     const product = this.state.product;
-
     if (this.state.loading) return null;
+
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar />
+          <NavBar qty={this.state.quantity}/>
         </Paper>
 
-        <form onSubmit={this.addToCart}>
-          <Container maxWidth='md' style={{ marginTop: '1rem' }}>
-            <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
-              <Grid item xs={5} >
-                <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
+        <Container maxWidth='md' style={{ marginTop: '1rem' }}>
+          <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
+            <Grid item xs={5} >
+              <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
                   src={product.imageUrl}
                   srcSet={product.imageUrl}
                   alt={product.title}
                   loading="lazy"
                 /></Item>
-              </Grid>
+            </Grid>
+            <form onSubmit={this.addToCart}>
               <Grid item xs={5} style={{ marginTop: 0, marginLeft: '1rem' }}>
                 <span>
                   <h3 style={{
                     fontFamily: 'eczar',
                     fontWeight: 300,
-                    marginBottom: 0
+                    marginBottom: 0,
+                    width: '345px'
                   }}>{product.name}</h3>
                   <h3 style={styles.spacing}>${product.price}</h3>
                   <h3 style={styles.spacing}>size</h3>
@@ -174,22 +183,23 @@ export default class ProductDetails extends React.Component {
                   {this.sizes()}
                 </Stack>
                 <Button type='submit' theme={theme} color='primary' variant='contained'
-                  style={{ width: '330px', marginTop: '1.5rem' }} onSubmit={this.addToCart}>
+                  style={{ width: '330px', marginTop: '1.5rem' }} onSubmit={this.addToCart} onClick={this.updateQty}>
                   ADD TO CART
                 </Button>
                 <div>
-                  <ul>
-                    <li><p>SKU: {product.sku}</p></li>
-                    <li><p>100% Authencity Guaranteed</p></li>
-                    <li><p>In stock & ready to ship!</p></li>
+                  <ul style={{ width: '345px' }}>
+                    <li><p key='sku'>SKU: {product.sku}</p></li>
+                    <li><p key='authentic'>100% Authencity Guaranteed</p></li>
+                    <li><p key='ready'>In stock & ready to ship!</p></li>
                   </ul>
                 </div>
               </Grid>
-            </Grid>
-          </Container>
-        </form>
+            </form>
+          </Grid>
+        </Container>
 
-        <CartModal qty={this.state.quantity} productinfo={this.state.product} size={this.state.size} show={this.state.isOpen} onHide={this.closeModal} />
+        <CartModal qty={this.state.quantity} productinfo={this.state.product}
+        size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
       </>
     )
     ;

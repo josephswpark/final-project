@@ -12,21 +12,26 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#223644'
+    },
+    secondary: {
+      main: '#223644'
     }
   }
+
 });
 
 const style = {
   box: {
     position: 'fixed',
-    height: '100%',
-    top: '50%',
-    right: 0,
-    transform: 'translate(0%, -50%)',
-    width: 405,
+    height: '39%',
+    top: '30%',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: 390,
     bgcolor: 'background.paper',
     boxShadow: 24,
-    p: 2
+    p: 2,
+    borderRadius: '1rem'
   },
   img: {
     width: '150px',
@@ -35,31 +40,25 @@ const style = {
   xIcon: {
     width: '1rem',
     height: '1rem',
-    marginLeft: '15.7rem',
-    marginTop: '1.7rem'
+    marginLeft: '2.5rem',
+    marginTop: '1rem'
   }
 };
 
 export default function CartModal(props) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+      <Modal {...props}
+        open={props.open}
+        onClose={props.onClose}
+        aria-labelledby="modal-modal-product"
+        aria-describedby="modal-modal-info"
       >
         <Box sx={style.box}>
-          <div style={{ display: 'flex' }}>
-            <h3>Cart</h3>
-            <p style={{ marginLeft: '0.5rem', marginTop: '1.3rem' }}>({props.qty} item)</p>
-            <IconButton aria-label="exit" style={style.xIcon} onClick={handleClose}>
-              <CloseIcon />
+          <div style={{ display: 'flex', height: '50px' }}>
+            <h4 style={{ width: '300px', marginTop: '0.8rem' }}>Successfully Added to Cart!</h4>
+            <IconButton aria-label="exit" style={style.xIcon} onClick={props.onClose} size='small'>
+              <CloseIcon fontSize='small'/>
             </IconButton>
           </div>
           <Grid container>
@@ -84,8 +83,11 @@ export default function CartModal(props) {
             </Grid>
           </Grid>
           <Button theme={theme} color='primary' variant='contained'
-            style={{ width: '370px', marginTop: '1.5rem' }} href='#checkout'>
-            CHECKOUT • ${props.productinfo.price}
+            style={{ width: '340px', marginLeft: '0.5rem' }} href='#cart'>
+            Go To Cart • ${props.productinfo.price}
+          </Button>
+          <Button variant='outlined' theme={theme} color='secondary' style={{ width: '340px', marginTop: '1rem', marginLeft: '0.5rem' }} onClick={props.onClose}>
+            Continue Shopping
           </Button>
         </Box>
       </Modal>

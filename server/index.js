@@ -6,13 +6,11 @@ const jsonMiddleware = express.json();
 const ClientError = require('./client-error');
 const authMiddleware = require('./auth-middleware');
 const jwt = require('jsonwebtoken');
-
 const pg = require('pg');
 const app = express();
 
 app.use(jsonMiddleware);
 app.use(staticMiddleware);
-app.use(errorMiddleware);
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -89,7 +87,7 @@ app.post('/api/addToCart', (req, res, next) => {
         const params = [payload.cartId, productId, quantity, size];
         db.query(sql, params)
           .then(result => {
-            res.json({ cartItem: result.rows[0] });
+            res.json({ token, cartItem: result.rows[0] });
           })
           .catch(err => next(err));
       })
@@ -132,7 +130,7 @@ app.get('/api/cart', (req, res, next) => {
          "imageUrl"
     from "cart"
     join "cartItems" using("cartId")
-    join "snowboards" using("productId")
+    join "shoes" using("productId")
    where "cartId" = $1
 `;
   const params = [cartId];
@@ -145,6 +143,7 @@ app.get('/api/cart', (req, res, next) => {
 });
 
 app.use(authMiddleware);
+app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);

@@ -3,12 +3,15 @@ import Home from './pages/home';
 import Products from './pages/products';
 import parseRoute from './lib/parse-route';
 import ProductDetails from './pages/product-details';
+import jwtDecode from 'jwt-decode';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      route: parseRoute(window.location.hash)
+      route: parseRoute(window.location.hash),
+      cart: null,
+      isOpen: false
     };
     this.renderPage = this.renderPage.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -22,6 +25,9 @@ export default class App extends React.Component {
       });
     });
 
+    const token = window.localStorage.getItem('token');
+    const tokenStored = token ? jwtDecode(token) : null;
+    this.setState({ cart: tokenStored });
   }
 
   openModal() {
@@ -48,6 +54,12 @@ export default class App extends React.Component {
       const productId = route.params.get('product');
       return <ProductDetails productId={productId}/>;
     }
+    // if (path === 'cart') {
+    //   const cartId = this.state.cart
+    //     ? this.state.cart.cartId
+    //     : null;
+    //   return <Cart cartId={cartId} />;
+    // }
   }
 
   render() {
