@@ -11,6 +11,8 @@ export default class App extends React.Component {
       route: parseRoute(window.location.hash)
     };
     this.renderPage = this.renderPage.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -19,6 +21,16 @@ export default class App extends React.Component {
         route: parseRoute(window.location.hash)
       });
     });
+
+  }
+
+  openModal() {
+    this.setState({ isOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isOpen: false });
+    window.location.search = '';
   }
 
   renderPage() {

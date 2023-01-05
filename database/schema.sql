@@ -61,7 +61,7 @@ CREATE TABLE "public"."cartItems" (
 	"cartId" integer NOT NULL UNIQUE,
 	"productId" int NOT NULL UNIQUE,
 	"quantity" integer NOT NULL,
-	"size" TEXT NOT NULL
+	"size" TEXT NOT NULL UNIQUE
 ) WITH (
   OIDS=FALSE
 );

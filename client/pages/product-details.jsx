@@ -8,6 +8,8 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { createTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
+import CartModal from '../components/cart-modal';
+// import jwtDecode from 'jwt-decode';
 
 const theme = createTheme({
   palette: {
@@ -44,10 +46,16 @@ export default class ProductDetails extends React.Component {
     this.state = {
       product: null,
       loading: true,
-      size: null
+      size: null,
+      isOpen: false,
+      cart: null,
+      quantity: 1
     };
     this.sizes = this.sizes.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +63,9 @@ export default class ProductDetails extends React.Component {
       .then(res => res.json())
       .then(product => this.setState({ product, loading: false }))
       .catch(err => console.error(err));
+    // const token = window.localStorage.getItem('token');
+    // const tokenStored = token ? jwtDecode(token) : null;
+    this.setState({ cart: this.state.product });
   }
 
   handleChange(event) {
@@ -62,10 +73,60 @@ export default class ProductDetails extends React.Component {
     this.setState({ size: Number(value) });
   }
 
+  addToCart(event) {
+    event.preventDefault();
+    if (this.state.size === null) {
+      alert('Please choose a size!');
+    } else {
+      const cartItem = {
+        productId: this.props.productId,
+        quantity: this.state.quantity,
+        size: this.state.size
+      };
+      const token = window.localStorage.getItem('token');
+      if (this.state.cart) {
+        fetch('/api/addToCart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Access-Token': token
+          },
+          body: JSON.stringify(cartItem)
+        })
+          .then(res => res.json())
+          .then(res => {
+            this.openModal();
+          })
+          .catch(err => console.error(err));
+      } else if (!this.state.cart) {
+        fetch('/api/addToCart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(cartItem)
+        })
+          .then(res => res.json())
+          .then(res => {
+            window.localStorage.setItem('token', res.token);
+            this.openModal();
+          })
+          .catch(err => console.error(err));
+      }
+    }
+  }
+
+  openModal() {
+    this.setState({ isOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isOpen: false });
+  }
+
   sizes() {
     const sizes = this.state.product.sizes;
     const sizeInputs = sizes.map(size => {
-
       return (
         <label key={size}>
           <input className="size-input" type="radio" value={size} id={size}
@@ -78,6 +139,7 @@ export default class ProductDetails extends React.Component {
   }
 
   render() {
+
     const product = this.state.product;
 
     if (this.state.loading) return null;
@@ -87,45 +149,47 @@ export default class ProductDetails extends React.Component {
           <NavBar />
         </Paper>
 
-        <Container maxWidth='md' style={{ marginTop: '1rem' }}>
-          <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
-            <Grid item xs={5} >
-              <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
+        <form onSubmit={this.addToCart}>
+          <Container maxWidth='md' style={{ marginTop: '1rem' }}>
+            <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
+              <Grid item xs={5} >
+                <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
                   src={product.imageUrl}
                   srcSet={product.imageUrl}
                   alt={product.title}
                   loading="lazy"
                 /></Item>
+              </Grid>
+              <Grid item xs={5} style={{ marginTop: 0, marginLeft: '1rem' }}>
+                <span>
+                  <h3 style={{
+                    fontFamily: 'eczar',
+                    fontWeight: 300,
+                    marginBottom: 0
+                  }}>{product.name}</h3>
+                  <h3 style={styles.spacing}>${product.price}</h3>
+                  <h3 style={styles.spacing}>size</h3>
+                </span>
+                <Stack direction='row'>
+                  {this.sizes()}
+                </Stack>
+                <Button type='submit' theme={theme} color='primary' variant='contained'
+                  style={{ width: '330px', marginTop: '1.5rem' }} onSubmit={this.addToCart}>
+                  ADD TO CART
+                </Button>
+                <div>
+                  <ul>
+                    <li><p>SKU: {product.sku}</p></li>
+                    <li><p>100% Authencity Guaranteed</p></li>
+                    <li><p>In stock & ready to ship!</p></li>
+                  </ul>
+                </div>
+              </Grid>
             </Grid>
+          </Container>
+        </form>
 
-            <Grid item xs={5} style={{ marginTop: 0, marginLeft: '1rem' }}>
-              <span>
-                <h3 style={{
-                  fontFamily: 'eczar',
-                  fontWeight: 300,
-                  marginBottom: 0
-
-                }}>{product.name}</h3>
-                <h3 style={styles.spacing}>${product.price}</h3>
-                <h3 style={styles.spacing}>size</h3>
-              </span>
-              <Stack direction='row'>
-                {this.sizes()}
-              </Stack>
-              <Button theme={theme} color='primary' variant='contained'
-              style={{ width: '330px', marginTop: '1.5rem' }} href=''>
-                ADD TO CART
-              </Button>
-              <div>
-                <ul>
-                  <li><p>SKU: {product.sku}</p></li>
-                  <li><p>100% Authencity Guaranteed</p></li>
-                  <li><p>In stock & ready to ship!</p></li>
-                </ul>
-              </div>
-            </Grid>
-          </Grid>
-        </Container>
+        <CartModal qty={this.state.quantity} productinfo={this.state.product} size={this.state.size} show={this.state.isOpen} onHide={this.closeModal} />
       </>
     )
     ;
