@@ -23,7 +23,7 @@ const theme = createTheme({
 const style = {
   box: {
     position: 'fixed',
-    height: '39%',
+    height: '350px',
     top: '30%',
     left: '50%',
     transform: 'translateX(-50%)',
@@ -83,10 +83,10 @@ export default function CartModal(props) {
             </Grid>
           </Grid>
           <Button theme={theme} color='primary' variant='contained'
-            style={{ width: '340px', marginLeft: '0.5rem' }} href='#cart'>
-            Go To Cart • ${props.productinfo.price}
+            style={{ width: '340px', marginLeft: '0.5rem', fontFamily: 'ezcar' }} href='#cart'>
+            GO To Cart
           </Button>
-          <Button variant='outlined' theme={theme} color='secondary' style={{ width: '340px', marginTop: '1rem', marginLeft: '0.5rem' }} onClick={props.onClose}>
+          <Button variant='outlined' theme={theme} color='secondary' style={{ width: '340px', marginTop: '1rem', marginLeft: '0.5rem', fontFamily: 'ezcar' }} onClick={props.onClose}>
             Continue Shopping
           </Button>
         </Box>

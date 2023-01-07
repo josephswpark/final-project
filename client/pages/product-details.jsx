@@ -24,7 +24,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    height: '20vh',
+    height: '30vh',
     backgroundImage: `url(${Image})`
   },
   infoStyle: {
@@ -48,7 +48,7 @@ export default class ProductDetails extends React.Component {
       loading: true,
       size: null,
       isOpen: false,
-      quantity: 0,
+      quantity: [],
       cart: null
     };
     this.sizes = this.sizes.bind(this);
@@ -60,7 +60,6 @@ export default class ProductDetails extends React.Component {
   }
 
   componentDidMount() {
-
     fetch(`/api/shoes/${this.props.productId}`)
       .then(res => res.json())
       .then(product => this.setState({ product, loading: false }))
@@ -88,7 +87,7 @@ export default class ProductDetails extends React.Component {
       };
       const token = window.localStorage.getItem('token');
       if (this.state.cart) {
-        fetch('/api/addToCart', {
+        fetch('/api/shoes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -102,7 +101,7 @@ export default class ProductDetails extends React.Component {
           })
           .catch(err => console.error(err));
       } else if (!this.state.cart) {
-        fetch('/api/addToCart', {
+        fetch('/api/shoes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -111,7 +110,7 @@ export default class ProductDetails extends React.Component {
         })
           .then(res => res.json())
           .then(res => {
-            // window.localStorage.setItem('token', res.token);
+            window.localStorage.setItem('token', res.token);
             this.openModal();
           })
           .catch(err => console.error(err));
@@ -120,8 +119,8 @@ export default class ProductDetails extends React.Component {
   }
 
   updateQty(event) {
-    if (event.target.className.includes('MuiButtonBase-root')) {
-      this.setState(prevState => ({ quantity: prevState.quantity + 1 }));
+    if (event.target.className.includes('MuiButtonBase-root') && this.state.size !== null) {
+      this.setState(prevState => ({ quantity: this.state.product }));
     }
   }
 
@@ -154,7 +153,7 @@ export default class ProductDetails extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={this.state.quantity}/>
+          <NavBar qty={this.state.quantity.length}/>
         </Paper>
 
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>
@@ -183,14 +182,14 @@ export default class ProductDetails extends React.Component {
                   {this.sizes()}
                 </Stack>
                 <Button type='submit' theme={theme} color='primary' variant='contained'
-                  style={{ width: '330px', marginTop: '1.5rem' }} onSubmit={this.addToCart} onClick={this.updateQty}>
+                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }} onClick={this.updateQty}>
                   ADD TO CART
                 </Button>
                 <div>
                   <ul style={{ width: '345px' }}>
-                    <li><p key='sku'>SKU: {product.sku}</p></li>
-                    <li><p key='authentic'>100% Authencity Guaranteed</p></li>
-                    <li><p key='ready'>In stock & ready to ship!</p></li>
+                    <li key='sku'><p>SKU: {product.sku}</p></li>
+                    <li key='authentic'><p>100% Authencity Guaranteed</p></li>
+                    <li key='ready'><p>In stock & ready to ship!</p></li>
                   </ul>
                 </div>
               </Grid>
