@@ -42,6 +42,26 @@ const styles = {
   },
   font: {
     fontFamily: 'eczar'
+  },
+  summaryPaper: {
+    p: 2,
+    marginTop: '1rem',
+    maxWidth: 390,
+    flexGrow: 1,
+    height: '325px',
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
+  },
+  cartPaper: {
+    marginBottom: '2rem',
+    marginTop: '1rem',
+    p: 2,
+    maxWidth: 550,
+    flexGrow: 1,
+    height: '240px',
+    boxShadow: '0 0.25rem 0.5rem rgba(0, 0, 0, 0.15)',
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
   }
 };
 
@@ -72,23 +92,16 @@ export default class Cart extends React.Component {
   orderSummary() {
     const total = Total(this.state.cartItems);
     return (
-      <Paper
-      sx={{
-        p: 2,
-        maxWidth: 390,
-        flexGrow: 1,
-        height: '325px',
-        backgroundColor: theme =>
-          theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
-      }}>
+      <Paper style={styles.summaryPaper}>
         <Grid container>
-          <List>
+          <List style={{ paddingLeft: '2rem', paddingTop: '1rem' }}>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={2} >
                 <Grid item style={{ maxWidth: '340px' }}>
-                  <Typography gutterBottom variant='h5' style={styles.font}>
+                  <Typography gutterBottom variant='h5' style={{ fontFamily: 'eczar', marginBottom: '1rem' }} theme={theme} color='secondary' >
                     Summary
                   </Typography>
+
                   <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', maxWidth: '390px' }} >
                     <Typography gutterBottom variant="subtitle1" style={styles.font}>
                       Subtotal
@@ -122,7 +135,6 @@ export default class Cart extends React.Component {
             </Grid>
           </List>
         </Grid>
-        {/* </Grid> */}
       </Paper>
     );
   }
@@ -133,7 +145,7 @@ export default class Cart extends React.Component {
       return (
         <>
           <Paper style={styles.paperContainer}>
-            <NavBar qty={shoe.length} />
+            <NavBar/>
           </Paper>
           <Container maxWidth='lg'>
             <div style={{ display: 'flex' }}>
@@ -171,26 +183,17 @@ export default class Cart extends React.Component {
               <h3>Bag</h3>
               <p style={{ marginLeft: '0.65rem', marginTop: '1.3rem' }}>{this.state.cartItems.length} item(s)</p>
             </div>
-
-            <Grid container justifyContent='space-evenly'>
-              <Paper
-            sx={{
-              p: 2,
-              maxWidth: 550,
-              flexGrow: 1,
-              height: '280px',
-              boxShadow: '0 0.25rem 0.5rem rgba(0, 0, 0, 0.15)',
-              backgroundColor: theme =>
-                theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
-            }}
-          >
-                <Grid container spacing={2} >
-                  <Grid item style={{ padding: 0, maxWidth: '550px' }}>
-                    {shoe.map((item, index) => (
-                      <ImageList key={item.itemId} style={{ marginTop: '1rem', marginLeft: '0.5rem' }}>
+          </Container>
+          <Container maxWidth='lg'>
+            <Grid container style={{ marginLeft: '0.5rem' }}>
+              <Grid container spacing={2} justifyContent='space-evenly'>
+                <Grid item style={{ padding: 0, maxWidth: '550px' }}>
+                  {shoe.map((item, index) => (
+                    <Paper style={styles.cartPaper} key={index}>
+                      <ImageList style={{ marginTop: '1rem', marginLeft: '0.5rem' }}>
                         <img alt="complex" src={item.imageUrl} style={{ width: '240px', height: '240px' }}/>
-                        <Grid item xs={12} sm container>
-                          <Grid item xs container direction="column" spacing={2} >
+                        <Grid item xs={12} container>
+                          <Grid item container direction="column" spacing={2} >
                             <Grid item xs style={{ paddingTop: '2.5rem', paddingLeft: '1rem' }}>
                               <Typography style={styles.font} gutterBottom variant="subtitle1" component="div">
                                 {item.name}
@@ -205,11 +208,11 @@ export default class Cart extends React.Component {
                           </Grid>
                         </Grid>
                       </ImageList>
-                    ))}
-                  </Grid>
+                    </Paper>
+                  ))}
                 </Grid>
-              </Paper>
-              {this.orderSummary()}
+                {this.orderSummary()}
+              </Grid>
             </Grid>
           </Container>
         </>

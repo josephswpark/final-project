@@ -17,7 +17,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <Paper style={styles.paperContainer}>
-        <NavBar qty={this.props.badgeContent}/>
+        <NavBar />
       </Paper>
     );
   }

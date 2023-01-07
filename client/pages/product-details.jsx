@@ -48,7 +48,7 @@ export default class ProductDetails extends React.Component {
       loading: true,
       size: null,
       isOpen: false,
-      quantity: [],
+      quantity: 1,
       cart: null
     };
     this.sizes = this.sizes.bind(this);
@@ -56,7 +56,7 @@ export default class ProductDetails extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.addToCart = this.addToCart.bind(this);
-    this.updateQty = this.updateQty.bind(this);
+    // this.updateQty = this.updateQty.bind(this);
   }
 
   componentDidMount() {
@@ -118,11 +118,11 @@ export default class ProductDetails extends React.Component {
     }
   }
 
-  updateQty(event) {
-    if (event.target.className.includes('MuiButtonBase-root') && this.state.size !== null) {
-      this.setState(prevState => ({ quantity: this.state.product }));
-    }
-  }
+  // updateQty(event) {
+  //   if (event.target.className.includes('MuiButtonBase-root') && this.state.size !== null) {
+  //     this.setState(prevState => ({ quantity: this.state.quantity + 1 }));
+  //   }
+  // }
 
   openModal() {
     this.setState({ isOpen: true });
@@ -153,7 +153,7 @@ export default class ProductDetails extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={this.state.quantity.length}/>
+          <NavBar />
         </Paper>
 
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>

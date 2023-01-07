@@ -4,7 +4,7 @@ const staticMiddleware = require('./static-middleware');
 const errorMiddleware = require('./error-middleware');
 const jsonMiddleware = express.json();
 const ClientError = require('./client-error');
-// const authMiddleware = require('./auth-middleware');
+const authMiddleware = require('./auth-middleware');
 const jwt = require('jsonwebtoken');
 const pg = require('pg');
 const app = express();
@@ -101,9 +101,6 @@ app.post('/api/shoes', (req, res, next) => {
     const sql = `
       insert into "cartItems" ("cartId", "productId", "quantity", "size")
       values ($1, $2, $3, $4)
-      on conflict ("cartId")
-      do update
-      set "quantity" = "cartItems"."quantity" + "excluded"."quantity"
       returning *
     `;
     const params = [cartId, productId, quantity, size];
@@ -123,8 +120,7 @@ app.get('/api/cart', (req, res, next) => {
   const payload = jwt.verify(token, process.env.TOKEN_SECRET);
   const cartId = payload.cartId;
   const sql = `
-  select "itemId",
-         "cartId",
+  select "cartId",
          "name",
          "price",
          "size",
@@ -144,6 +140,7 @@ app.get('/api/cart', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.use(authMiddleware);
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

@@ -47,7 +47,7 @@ export default class Products extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar />
+          <NavBar qty={this.props.qty}/>
           <h1 style={styles.shopAll}>Shop All Sneakers</h1>
         </Paper>
 
@@ -56,7 +56,7 @@ export default class Products extends React.Component {
           <ImageList style={{ gap: 20 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }}>
             {productList.map(item => (
               <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                <ImageListItem key={item.name}>
+                <ImageListItem>
                   <img style={{ cursor: 'pointer' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
