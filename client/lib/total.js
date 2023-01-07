@@ -2,7 +2,7 @@ export default function Total(items) {
   const result = {};
   let subtotal = 0;
   items.forEach(item => {
-    subtotal += (item.price * items.length);
+    subtotal += (item.price);
   });
   result.subtotal = subtotal;
   result.tax = (subtotal * 0.0775).toFixed(2);
