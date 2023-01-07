@@ -58,8 +58,9 @@ CREATE TABLE "public"."sizes" (
 
 
 CREATE TABLE "public"."cartItems" (
-	"cartId" integer NOT NULL UNIQUE,
-	"productId" int NOT NULL,
+  "itemId" serial NOT NULL,
+	"cartId" int NOT NULL UNIQUE,
+	"productId" int NOT NULL ,
 	"quantity" integer NOT NULL,
 	"size" TEXT NOT NULL
 ) WITH (
