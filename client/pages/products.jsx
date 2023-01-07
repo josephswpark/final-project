@@ -12,14 +12,14 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    height: '40vh',
+    height: '30vh',
     backgroundImage: `url(${Image})`
   },
   shopAll: {
     textAlign: 'center',
     fontFamily: 'eczar',
     color: 'white',
-    paddingTop: '7.5rem'
+    paddingTop: '2rem'
   },
   productStyle: {
     fontFamily: 'eczar',
@@ -47,16 +47,16 @@ export default class Products extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar />
+          <NavBar qty={this.props.qty}/>
           <h1 style={styles.shopAll}>Shop All Sneakers</h1>
         </Paper>
 
         <Container maxWidth='lg'>
 
-          <ImageList style={{ gap: 20 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
+          <ImageList style={{ gap: 20 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }}>
             {productList.map(item => (
-              <a href={`#product?product=${item.productId}`} key={productList.productId} style={{ textDecoration: 'none', color: 'black' }} >
-                <ImageListItem key={item.img} >
+              <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                <ImageListItem>
                   <img style={{ cursor: 'pointer' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}

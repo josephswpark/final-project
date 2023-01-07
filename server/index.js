@@ -65,25 +65,26 @@ app.get('/api/shoes/:productId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.post('/api/addToCart', (req, res, next) => {
+app.post('/api/shoes', (req, res, next) => {
   const token = req.get('X-Access-Token');
   if (!token) {
     const cartSql = `
       insert into "cart" ("purchased")
-        values ('false')
-        returning "cartId"
-  `;
+              values ('false')
+      returning "cartId"
+    `;
     db.query(cartSql)
       .then(result => {
         const cartId = result.rows[0];
         const payload = cartId;
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
         const cartItem = req.body;
         const { productId, quantity, size } = cartItem;
         const sql = `
-        insert into "cartItems" ("cartId", "productId", "quantity", "size")
-        values ($1, $2, $3, $4)
-        returning *
-      `;
+          insert into "cartItems" ("cartId", "productId", "quantity", "size")
+          values ($1, $2, $3, $4)
+          returning *
+        `;
         const params = [payload.cartId, productId, quantity, size];
         db.query(sql, params)
           .then(result => {
@@ -100,9 +101,6 @@ app.post('/api/addToCart', (req, res, next) => {
     const sql = `
       insert into "cartItems" ("cartId", "productId", "quantity", "size")
       values ($1, $2, $3, $4)
-      on conflict ("cartId", "productId", "size")
-      do update
-      set "quantity" = "cartItems"."quantity" + "excluded"."quantity"
       returning *
     `;
     const params = [cartId, productId, quantity, size];
@@ -122,7 +120,7 @@ app.get('/api/cart', (req, res, next) => {
   const payload = jwt.verify(token, process.env.TOKEN_SECRET);
   const cartId = payload.cartId;
   const sql = `
-  select "productId",
+  select "cartId",
          "name",
          "price",
          "size",
