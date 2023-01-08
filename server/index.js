@@ -65,7 +65,7 @@ app.get('/api/shoes/:productId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.post('/api/shoes', (req, res, next) => {
+app.post('/api/addToCart', (req, res, next) => {
   const token = req.get('X-Access-Token');
   if (!token) {
     const cartSql = `
@@ -120,7 +120,9 @@ app.get('/api/cart', (req, res, next) => {
   const payload = jwt.verify(token, process.env.TOKEN_SECRET);
   const cartId = payload.cartId;
   const sql = `
-  select "cartId",
+  select "itemId",
+         "cartId",
+         "productId",
          "name",
          "price",
          "size",
@@ -129,7 +131,8 @@ app.get('/api/cart', (req, res, next) => {
     from "cart"
     join "cartItems" using("cartId")
     join "shoes" using("productId")
-   where "cartId" = $1
+    where "cartId" = $1
+    order by "itemId" DESC
 `;
   const params = [cartId];
   db.query(sql, params)
@@ -141,6 +144,61 @@ app.get('/api/cart', (req, res, next) => {
 });
 
 app.use(authMiddleware);
+
+app.delete('/api/cartItems/:itemId', (req, res, next) => {
+  const { cartId } = req.cartId;
+  const itemId = Number(req.params.itemId);
+  // const size = Number(req.params.size);
+  const sql = `
+      delete from "cartItems"
+        where "itemId" = $1
+  `;
+  const params = [itemId];
+  db.query(sql, params)
+    .then(result => {
+      const sql = `
+          select "itemId",
+              "cartId",
+              "productId",
+              "name",
+              "price",
+              "size",
+              "quantity",
+              "imageUrl"
+          from "cart"
+          join "cartItems" using("cartId")
+          join "shoes" using("productId")
+          where "cartId" = $1
+          order by "itemId" DESC
+      `;
+      const params = [cartId];
+      db.query(sql, params)
+        .then(result => {
+          const cartItems = result.rows;
+          res.status(200).json(cartItems);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+// app.delete('/api/cartItems/:itemId', (req, res, next) => {
+//   // const { cartId } = req.cartId;
+//   const itemId = Number(req.params.itemId);
+//   // const size = Number(req.params.size);
+//   const sql = `
+//       delete from "cartItems"
+//         where "itemId" = $1
+//   `;
+//   const params = [itemId];
+//   db.query(sql, params)
+//     .then(result => {
+//       const cartItems = result.rows[0];
+//       res.status(200).json(cartItems);
+//     })
+//     .catch(err => next(err));
+// });
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
