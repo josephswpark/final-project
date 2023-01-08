@@ -86,7 +86,9 @@ export default function CartModal(props) {
             style={{ width: '340px', marginLeft: '0.5rem', fontFamily: 'ezcar' }} href='#cart'>
             GO To Cart
           </Button>
-          <Button variant='outlined' theme={theme} color='secondary' style={{ width: '340px', marginTop: '1rem', marginLeft: '0.5rem', fontFamily: 'ezcar' }} onClick={props.onClose}>
+          <Button variant='outlined' theme={theme} color='secondary'
+          style={{ width: '340px', marginTop: '1rem', marginLeft: '0.5rem', fontFamily: 'ezcar' }}
+          onClick={props.onClose} href='#products'>
             Continue Shopping
           </Button>
         </Box>
