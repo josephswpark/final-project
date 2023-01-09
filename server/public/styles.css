@@ -8,8 +8,8 @@ input[type="radio"] {
 }
 
 input:checked ~ span {
-  font-weight: bolder;
-  color: #223644;
+  font-weight: bold;
+  color: #c4b7a6;
 }
 
 .size {
@@ -18,7 +18,7 @@ input:checked ~ span {
 
 label {
   padding: 7px 16.5px;
-  border: 1px solid lightgrey;
+  border: 1px solid #223644;
   cursor: pointer;
   margin-right: 0.3rem;
   border-radius: 5px;

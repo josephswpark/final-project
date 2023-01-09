@@ -87,7 +87,7 @@ export default class ProductDetails extends React.Component {
       };
       const token = window.localStorage.getItem('token');
       if (this.state.cart) {
-        fetch('/api/shoes', {
+        fetch('/api/addToCart', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ export default class ProductDetails extends React.Component {
           })
           .catch(err => console.error(err));
       } else if (!this.state.cart) {
-        fetch('/api/shoes', {
+        fetch('/api/addToCart', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
