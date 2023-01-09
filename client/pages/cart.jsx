@@ -160,11 +160,11 @@ export default class Cart extends React.Component {
               <p style={{ marginLeft: '0.65rem', marginTop: '1.3rem' }}>{this.state.cartItems.length} item(s)</p>
             </div>
             <Grid container spacing={2} direction='flex' justifyContent='space-evenly'>
-              <Grid item style={{ width: '210px' }}>
-                <Grid item xs={12} sm container>
-                  <Grid item xs container direction="column" spacing={2} >
-                    <Grid item xs style={{ }} >
-                      <Typography style={{ fontFamily: 'eczar', width: '250px' }} gutterBottom variant="subtitle1" component="div" >
+              <Grid item style={{ width: '575px' }}>
+                <Grid item xs={12} sm container >
+                  <Grid item xs container direction="column" spacing={2}>
+                    <Grid item xs style={{ textAlign: 'center' }} >
+                      <Typography style={{ fontFamily: 'eczar', textAlign: 'center' }} gutterBottom variant="subtitle1" component="div" >
                         Your cart is currently empty!
                       </Typography>
                       <Button href='#products' variant='contained' theme={theme} color='secondary' style={{ width: '205px', marginTop: '1rem', fontFamily: 'ezcar' }}>
