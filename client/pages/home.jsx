@@ -14,10 +14,32 @@ const styles = {
 };
 
 export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cartItems: []
+    };
+  }
+
+  componentDidMount() {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      fetch('/api/cart', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': token
+        }
+      })
+        .then(res => res.json())
+        .then(cart => this.setState({ cartItems: cart }))
+        .catch(err => console.error(err));
+    }
+  }
+
   render() {
     return (
       <Paper style={styles.paperContainer}>
-        <NavBar />
+        <NavBar qty={this.state.cartItems.length}/>
       </Paper>
     );
   }

@@ -49,7 +49,8 @@ export default class ProductDetails extends React.Component {
       size: null,
       isOpen: false,
       quantity: 1,
-      cart: null
+      cart: null,
+      cartItems: []
     };
     this.sizes = this.sizes.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -67,7 +68,17 @@ export default class ProductDetails extends React.Component {
     const token = window.localStorage.getItem('token');
     const tokenStored = token ? jwtDecode(token) : null;
     this.setState({ cart: tokenStored });
-
+    if (token) {
+      fetch('/api/cart', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': token
+        }
+      })
+        .then(res => res.json())
+        .then(cart => this.setState({ cartItems: cart }))
+        .catch(err => console.error(err));
+    }
   }
 
   handleChange(event) {
@@ -118,12 +129,6 @@ export default class ProductDetails extends React.Component {
     }
   }
 
-  // updateQty(event) {
-  //   if (event.target.className.includes('MuiButtonBase-root') && this.state.size !== null) {
-  //     this.setState(prevState => ({ quantity: this.state.quantity + 1 }));
-  //   }
-  // }
-
   openModal() {
     this.setState({ isOpen: true });
   }
@@ -148,12 +153,12 @@ export default class ProductDetails extends React.Component {
 
   render() {
     const product = this.state.product;
+    const shoe = this.state.cartItems;
     if (this.state.loading) return null;
-
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar />
+          <NavBar qty={shoe.length} />
         </Paper>
 
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>

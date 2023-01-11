@@ -32,7 +32,10 @@ const styles = {
 export default class Products extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { products: [] };
+    this.state = {
+      products: [],
+      cartItems: []
+    };
   }
 
   componentDidMount() {
@@ -40,14 +43,27 @@ export default class Products extends React.Component {
       .then(res => res.json())
       .then(products => this.setState({ products }))
       .catch(err => console.error(err));
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      fetch('/api/cart', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': token
+        }
+      })
+        .then(res => res.json())
+        .then(cart => this.setState({ cartItems: cart }))
+        .catch(err => console.error(err));
+    }
   }
 
   render() {
     const productList = this.state.products;
+    const shoe = this.state.cartItems;
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={this.props.qty}/>
+          <NavBar qty={shoe.length} />
           <h1 style={styles.shopAll}>Shop All Sneakers</h1>
         </Paper>
 
