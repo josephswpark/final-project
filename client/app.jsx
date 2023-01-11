@@ -5,6 +5,7 @@ import parseRoute from './lib/parse-route';
 import ProductDetails from './pages/product-details';
 import jwtDecode from 'jwt-decode';
 import Cart from '../client/pages/cart';
+import Checkout from './pages/checkout';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -59,6 +60,9 @@ export default class App extends React.Component {
         ? this.state.cart.cartId
         : null;
       return <Cart cartId={cartId} />;
+    }
+    if (path === 'checkout') {
+      return <Checkout />;
     }
   }
 
