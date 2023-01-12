@@ -160,7 +160,6 @@ export default class ProductDetails extends React.Component {
         <Paper style={styles.paperContainer}>
           <NavBar qty={shoe.length} />
         </Paper>
-
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>
           <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
             <Grid item xs={5} >
@@ -201,7 +200,6 @@ export default class ProductDetails extends React.Component {
             </form>
           </Grid>
         </Container>
-
         <CartModal qty={this.state.quantity} productinfo={this.state.product}
         size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
       </>
