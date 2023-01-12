@@ -26,9 +26,15 @@ export default class App extends React.Component {
         route: parseRoute(window.location.hash)
       });
     });
-    const token = window.localStorage.getItem('token');
-    const tokenStored = token ? jwtDecode(token) : null;
-    this.setState({ cart: tokenStored });
+    const searchParams = new URL(window.location).searchParams;
+    if (searchParams.has('payment_intent')) {
+      window.localStorage.removeItem('token');
+    } else {
+      const token = window.localStorage.getItem('token');
+      const tokenStored = token ? jwtDecode(token) : null;
+      this.setState({ cart: tokenStored });
+    }
+
   }
 
   openModal() {
@@ -44,9 +50,7 @@ export default class App extends React.Component {
     const { route } = this.state;
     const { path } = route;
     if (path === 'home' || path === '') {
-      return (
-        <Home />
-      );
+      return <Home />;
     }
     if (path === 'products') {
       return <Products/>;

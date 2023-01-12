@@ -187,22 +187,22 @@ app.post('/api/checkout', (req, res, next) => {
   const payload = jwt.verify(token, process.env.TOKEN_SECRET);
   const cartId = payload.cartId;
   const checkoutInfo = req.body;
-  const { email, firstName, lastName, address, address2, city, state, zip, total } = checkoutInfo;
+  const { email, firstName, lastName, address, address2, city, state, zipCode, country, total } = checkoutInfo;
   if (!token) {
     throw new ClientError(404, 'Cart was not found.');
   }
   const sql = `
-      insert into "usersAddress" ("email", "firstName", "lastName", "address", "address2", "city", "state", "zip" )
-      values ($1, $2, $3, $4, $5)
+      insert into "usersAddress" ("email", "firstName", "lastName", "address", "address2", "city", "state", "zipCode", "country" )
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       returning *
   `;
-  const params = [email, firstName, lastName, address, address2, city, state, zip];
+  const params = [email, firstName, lastName, address, address2, city, state, zipCode, country];
   db.query(sql, params)
     .then(result => {
       const customer = result.rows[0];
       const { userId } = customer;
       const sql = `
-        insert into "order" ("cartId", "userId", "totalCost")
+        insert into "orders" ("cartId", "userId", "totalCost")
         values($1, $2, $3)
         returning *
       `;
@@ -225,52 +225,84 @@ app.post('/api/checkout', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// app.get('/api/cost', (req, res, next) => {
+//   const { cartId } = req.cartId;
+//   const sql = `
+//     select sum("price")
+//       from "shoes"
+//       join "cartItems" using("productId")
+//       join  "cart" using("cartId")
+//       where "cartId" = $1
+//   `;
+//   const params = [cartId];
+//   db.query(sql, params)
+//     .then(result => {
+//       const costs = {};
+//       costs.subtotal = Number(result.rows[0].sum / 100);
+//       costs.taxes = (costs.subtotal * 0.0775).toFixed(2);
+//       costs.total = Number((costs.subtotal + Number((costs.taxes))).toFixed(2));
+//       costs.subtotal = Number(costs.subtotal.toFixed(2)).toLocaleString('en', {
+//         minimumFractionDigits: 2
+//       });
+//       costs.total = Number(costs.total.toFixed(2)).toLocaleString('en', {
+//         minimumFractionDigits: 2
+//       });
+//       res.json(costs);
+//     })
+//     .catch(err => next(err));
+// });
+// const orderId = result.rows[0];
+// res.status(200).json(orderId);
+
 app.get('/api/cost', (req, res, next) => {
-  const token = req.get('X-Access-Token');
-  const payload = jwt.verify(token, process.env.TOKEN_SECRET);
-  const cartId = payload.cartId;
+  const { cartId } = req.cartId;
   const sql = `
     select sum("price")
-      from "shoes"
-      join "cartItems" using ("productId")
-      join  "cart" using ("cartId")
-      where "cartId" = $1
+        from "shoes"
+        join "cartItems" using ("productId")
+        join "cart" using ("cartId")
+        where "cartId" = $1
   `;
   const params = [cartId];
   db.query(sql, params)
     .then(result => {
       const costs = {};
       costs.subtotal = Number(result.rows[0].sum);
-      costs.taxes = Number((costs.subtotal * 0.0775).toFixed(2));
-      costs.total = Number((costs.subtotal + (costs.taxes)).toFixed(2));
+      costs.taxes = (costs.subtotal * 0.0775).toFixed(2);
+      costs.total = Number((costs.subtotal + Number((costs.taxes))).toFixed(2));
+      costs.subtotal = Number(costs.subtotal.toFixed(2)).toLocaleString('en', {
+        minimumFractionDigits: 2
+      });
+      costs.total = Number(costs.total.toFixed(2)).toLocaleString('en', {
+        minimumFractionDigits: 2
+      });
+      res.json(costs);
     })
     .catch(err => next(err));
 });
 
 app.post('/create-payment-intent', async (req, res, next) => {
-  const token = req.get('X-Access-Token');
-  const payload = jwt.verify(token, process.env.TOKEN_SECRET);
-  const cartId = payload.cartId;
+  const { cartId } = req.cartId;
   const sql = `
     select sum("price")
         from "shoes"
         join "cartItems" using ("productId")
-        join  "cart" using ("cartId")
+        join "cart" using ("cartId")
         where "cartId" = $1
     `;
   const params = [cartId];
   db.query(sql, params)
-    .then(result => result.rows[0].sum)
+    .then(result => Number(result.rows[0].sum))
     .then(result => {
-      const subtotal = parseInt(result);
+      const subtotal = result;
       const taxes = subtotal * 0.0775;
       const total = subtotal + taxes;
-      return Math.trunc(total);
+      return (Math.trunc(total) * 100);
     })
     .then(result => {
       stripe.paymentIntents.create({
         amount: result,
-        current: 'usd',
+        currency: 'usd',
         automatic_payment_methods: {
           enabled: true
         }

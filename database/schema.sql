@@ -25,8 +25,7 @@ CREATE TABLE "public"."orders" (
 	"orderId" serial NOT NULL,
 	"cartId" integer NOT NULL,
 	"userId" integer NOT NULL,
-	"totalCost" integer NOT NULL,
-	"purchasedTime" timestamp with time zone NOT NULL,
+	"totalCost" NUMERIC NOT NULL,
 	CONSTRAINT "orders_pk" PRIMARY KEY ("orderId")
 ) WITH (
   OIDS=FALSE
@@ -38,7 +37,7 @@ CREATE TABLE "public"."shoes" (
 	"productId" integer NOT NULL,
 	"sku" TEXT NOT NULL UNIQUE,
 	"name" TEXT NOT NULL,
-	"price" integer NOT NULL,
+	"price" INTEGER NOT NULL,
 	"imageUrl" TEXT NOT NULL,
 	"brand" TEXT NOT NULL,
 	CONSTRAINT "shoes_pk" PRIMARY KEY ("productId")
@@ -80,14 +79,17 @@ CREATE TABLE "public"."cart" (
 
 
 CREATE TABLE "public"."usersAddress" (
-	"userId" integer NOT NULL,
+	"userId" serial NOT NULL,
+  "email" TEXT NOT NULL,
 	"firstName" TEXT NOT NULL,
 	"lastName" TEXT NOT NULL,
 	"address" TEXT NOT NULL,
 	"address2" TEXT NOT NULL,
 	"city" TEXT NOT NULL,
 	"state" TEXT NOT NULL,
-	"zipCode" TEXT NOT NULL
+	"zipCode" TEXT NOT NULL,
+  "country" TEXT NOT NULL,
+  CONSTRAINT "usersAddress_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
 );
@@ -96,7 +98,7 @@ CREATE TABLE "public"."usersAddress" (
 
 
 ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("cartId") REFERENCES "cart"("cartId");
-ALTER TABLE "orders" ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+ALTER TABLE "orders" ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("userId") REFERENCES "usersAddress"("userId");
 
 
 ALTER TABLE "sizes" ADD CONSTRAINT "sizes_fk0" FOREIGN KEY ("productId") REFERENCES "shoes"("productId");
@@ -105,4 +107,4 @@ ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk0" FOREIGN KEY ("cartId") RE
 ALTER TABLE "cartItems" ADD CONSTRAINT "cartItems_fk1" FOREIGN KEY ("productId") REFERENCES "shoes"("productId");
 
 
-ALTER TABLE "usersAddress" ADD CONSTRAINT "usersAddress_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+-- ALTER TABLE "usersAddress" ADD CONSTRAINT "usersAddress_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");

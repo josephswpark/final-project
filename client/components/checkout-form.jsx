@@ -10,14 +10,13 @@ import ImageList from '@mui/material/ImageList';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import Cart from '../pages/cart';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
+// import Stepper from '@mui/material/Stepper';
+// import Step from '@mui/material/Step';
+// import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-// import TextField from '@mui/material/TextField';
-
-// import { ElementsConsumer } from '@stripe/react-stripe-js';
+import TextField from '@mui/material/TextField';
+import { ElementsConsumer, PaymentElement } from '@stripe/react-stripe-js';
 
 const theme = createTheme({
   palette: {
@@ -49,21 +48,20 @@ const styles = {
   }
 };
 
-// export default function InjectedCheckoutForm() {
-//   return (
-//     <ElementsConsumer>
-//       {({ stripe, elements }) => (
-//         <Checkout stripe={stripe} elements={elements} />
-//       )}
-//     </ElementsConsumer>
-//   );
-// }
+export default function InjectedCheckoutForm() {
+  return (
+    <ElementsConsumer>
+      {({ stripe, elements }) => (
+        <Checkout stripe={stripe} elements={elements} />
+      )}
+    </ElementsConsumer>
+  );
+}
 
-export default class Checkout extends React.Component {
+class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkout: 'contactInfo',
       email: '',
       firstName: '',
       lastName: '',
@@ -72,12 +70,17 @@ export default class Checkout extends React.Component {
       city: '',
       state: '',
       zip: '',
+      country: '',
       costs: {},
-      cartItems: []
+      cartItems: [],
+      currentState: 0
     };
     this.orderSummary = this.orderSummary.bind(this);
     this.cart = this.cart.bind(this);
     this.delete = this.delete.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.payment = this.payment.bind(this);
   }
 
   componentDidMount() {
@@ -93,6 +96,20 @@ export default class Checkout extends React.Component {
         .then(cart => this.setState({ cartItems: cart }))
         .catch(err => console.error(err));
     }
+    fetch('/api/cost', {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': token
+      }
+    })
+      .then(res => res.json())
+      .then(costs => this.setState({ costs }))
+      .catch(err => console.error(err));
+  }
+
+  handleChange(event) {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   }
 
   delete(event) {
@@ -188,11 +205,64 @@ export default class Checkout extends React.Component {
     );
   }
 
+  payment() {
+    if (!this.state.email || !this.state.firstName || !this.state.lastName || !this.state.address ||
+      !this.state.city || !this.state.state || !this.state.zip) {
+      alert('Please fill out the missing information.');
+    } else {
+      this.setState({ currentState: 1 });
+    }
+  }
+
+  handleSubmit = async event => {
+    event.preventDefault();
+    const token = window.localStorage.getItem('token');
+    const total = Total(this.state.cartItems);
+    const address2 = this.state.address2 === '' ? null : this.state.address2;
+    const body = {
+      email: this.state.email,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      address: this.state.address,
+      address2,
+      city: this.state.city,
+      state: this.state.state,
+      zipCode: this.state.zip,
+      country: this.state.country,
+      total: Number((total.total))
+    };
+
+    const { stripe, elements } = this.props;
+
+    if (!stripe || !elements) {
+      return;
+    }
+    stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: new URL('#home', window.location).href
+      }
+    })
+      .catch(err => console.error(err));
+
+    fetch('/api/checkout', {
+      method: 'POST',
+      headers: {
+        'X-Access-Token': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  };
+
   render() {
     const shoe = this.state.cartItems;
     if (!shoe.length) {
       return <Cart />;
-    } else {
+    }
+    if (this.state.currentState === 0) {
       return (
         <>
           <Paper style={styles.paperContainer}>
@@ -206,7 +276,43 @@ export default class Checkout extends React.Component {
             </Container>
             <Container maxWidth='lg'>
               <Grid container>
-                <Steps />
+                <form onSubmit={this.handleSubmit}>
+                  <AddressForm handleChange={this.handleChange}
+                    email={this.state.email}
+                    firstName={this.state.firstName}
+                    lastName={this.state.lastName}
+                    address={this.state.address}
+                    address2={this.state.address2}
+                    city={this.state.city}
+                    state={this.state.state}
+                    zip={this.state.zip}
+                    country={this.state.country}
+                    checkout={this.state.checkout}
+                    onClick={this.payment}/>
+                </form>
+                {this.orderSummary()}
+              </Grid>
+            </Container>
+          </ThemeProvider>
+          {this.Copyright()}
+        </>
+      );
+    }
+    if (this.state.currentState === 1) {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+          </Paper>
+          <ThemeProvider theme={theme}>
+            <Container>
+              <Typography component="h1" variant="h4" align="center" style={{ fontFamily: 'eczar', marginTop: '2.5rem' }}>
+                Checkout
+              </Typography>
+            </Container>
+            <Container maxWidth='lg'>
+              <Grid container>
+                <PaymentForm/>
                 {this.orderSummary()}
               </Grid>
             </Container>
@@ -218,126 +324,195 @@ export default class Checkout extends React.Component {
   }
 }
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+class AddressForm extends React.Component {
+  render() {
+    return (
+      <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }} >
+        <Grid sx={{ pt: 0, pb: 1.5 }} style={{ maxWidth: '550px' }}>
+          <Typography variant="h6" gutterBottom style={{ marginBottom: '1rem', fontFamily: 'eczar' }}>
+            Shipping address
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="email"
+                name="email"
+                helperText="Email"
+                placeholder='Email'
+                autoComplete="email"
+                variant="standard"
+                fullWidth
+                value={this.props.email}
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField FormHelperTextProps={{ style: { fontFamily: 'eczar' } }} inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="firstName"
+                name="firstName"
+                helperText="First name"
+                placeholder='First name'
+                autoComplete="given-name"
+                variant="standard"
+                fullWidth
+                value={this.props.firstName}
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="lastName"
+                name="lastName"
+                helperText="Last name"
+                placeholder='Last name'
+                fullWidth
+                autoComplete="family-name"
+                value={this.props.lastName}
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="address"
+                name="address"
+                helperText="Address line 1"
+                placeholder='Address line 1'
+                value={this.props.address}
+                fullWidth
+                autoComplete="shipping address-line1"
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                id="address2"
+                name="address2"
+                helperText="Address line 2"
+                placeholder='Address line 2'
+                fullWidth
+                autoComplete="shipping address-line2"
+                value={this.props.address2}
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="city"
+                name="city"
+                helperText="City"
+                placeholder='City'
+                fullWidth
+                value={this.props.city}
+                autoComplete="shipping city"
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                id="state"
+                name="state"
+                helperText="State"
+                placeholder='State'
+                value={this.props.state}
+                fullWidth
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="zip"
+                name="zip"
+                helperText="Zip / Postal code"
+                placeholder='Zip / Postal code'
+                fullWidth
+                value={this.props.zipCode}
+                autoComplete="shipping postal-code"
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                FormHelperTextProps={{ style: { fontFamily: 'eczar' } }}
+                inputProps={{ style: { fontFamily: 'eczar' } }}
+                required
+                id="country"
+                name='country'
+                placeholder="Country"
+                helperText='Country'
+                fullWidth
+                autoComplete="shipping country"
+                value={this.props.country}
+                variant="standard"
+                onChange={this.props.handleChange}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }} >
+          <Button sx={{ mt: 3, ml: 1 }} href='#cart' style={{ fontFamily: 'eczar' }}>
+            Back
+          </Button>
+          <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='button' style={{ fontFamily: 'eczar' }} onClick={this.props.onClick}>
+            NEXT
+          </Button>
+        </Box>
+      </Paper>
+    );
+  }
+}
+
+class PaymentForm extends React.Component {
+  render() {
+    return (
+      <Container maxWidth='sm'>
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }} >
+          <Typography variant="h6" gutterBottom style={{ fontFamily: 'eczar' }}>
+            Payment Information
+          </Typography>
+          <PaymentElement />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }} >
+            <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='submit' style={{ fontFamily: 'eczar' }}>
+              PLACE ORDER
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    );
+  }
+}
+
+// const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
 // function getStepContent(step) {
 //   switch (step) {
 //     case 0:
-//       return (
-//         <>
-//           <Typography variant="h6" gutterBottom >
-//             Shipping address
-//           </Typography>
-//           <form>
-//             <Grid container spacing={3}>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   required
-//                   id="email"
-//                   name="email"
-//                   helperText="Email"
-//                   placeholder='Email'
-//                   autoComplete="email"
-//                   variant="standard"
-//                   fullWidth
-//                 />
-//               </Grid>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   required
-//                   id="firstName"
-//                   name="firstName"
-//                   helperText="First name"
-//                   placeholder='First name'
-//                   autoComplete="given-name"
-//                   variant="standard"
-//                   fullWidth
-//                 />
-//               </Grid>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   required
-//                   id="lastName"
-//                   name="lastName"
-//                   helperText="Last name"
-//                   placeholder='Last name'
-//                   fullWidth
-//                   autoComplete="family-name"
-//                   variant="standard"
-//                 />
-//               </Grid>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   required
-//                   id="address1"
-//                   name="address1"
-//                   helperText="Address 1"
-//                   placeholder='Address line 1'
-//                   fullWidth
-//                   autoComplete="shipping address-line1"
-//                   variant="standard"
-//                 />
-//               </Grid>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   id="address2"
-//                   name="address2"
-//                   helperText="Address line 2"
-//                   placeholder='Address line 2'
-//                   fullWidth
-//                   autoComplete="shipping address-line2"
-//                   variant="standard"
-//                 />
-//               </Grid>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   required
-//                   id="city"
-//                   name="city"
-//                   helperText="City"
-//                   placeholder='City'
-//                   fullWidth
-//                   autoComplete="shipping address-level2"
-//                   variant="standard"
-//                 />
-//               </Grid>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   id="state"
-//                   name="state"
-//                   helperText="State/Province/Region"
-//                   placeholder='State/Province/Region'
-//                   fullWidth
-//                   variant="standard"
-//                 />
-//               </Grid>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   required
-//                   id="zip"
-//                   name="zip"
-//                   helperText="Zip / Postal code"
-//                   placeholder='Zip / Postal code'
-//                   fullWidth
-//                   autoComplete="shipping postal-code"
-//                   variant="standard"
-//                 />
-//               </Grid>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   required
-//                   id="country"
-//                   placeholder="Country"
-//                   helperText='Country'
-//                   fullWidth
-//                   autoComplete="shipping country"
-//                   variant="standard"
-//                 />
-//               </Grid>
-//             </Grid>
-//           </form>
-//         </>
-//       );
+//       return <AddressForm />;
 //     // case 1:
 //     //   return <PaymentForm />;
 //     // case 2:
@@ -347,55 +522,55 @@ const steps = ['Shipping address', 'Payment details', 'Review your order'];
 //   }
 // }
 
-class Steps extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentState: 0
-    };
-  }
+// class Steps extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       currentState: 0
+//     };
+//   }
 
-  render() {
-    return (
-      <Container component="main" maxWidth="sm" sx={{}}>
-        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-          <Stepper sx={{ pt: 3, pb: 5 }} style={{ maxWidth: '550px' }}>
-            {steps.map(label => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {this.state.currentState === steps.length
-            ? (
-              <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
-                </Typography>
-                <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
-                </Typography>
-              </React.Fragment>
-              )
-            : (
-              <>
-                {/* {getStepContent(activeStep)} */}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                  <Button variant="contained" sx={{ mt: 3, ml: 1 }}>
-                    {this.state.currentState === steps.length - 1 ? 'Place order' : 'Next'}
-                  </Button>
-                </Box>
+//   render() {
+//     return (
+//       <Container component="main" maxWidth="sm" sx={{}}>
+//         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+//           <Stepper sx={{ pt: 3, pb: 5 }} style={{ maxWidth: '550px' }}>
+//             {steps.map(label => (
+//               <Step key={label}>
+//                 <StepLabel>{label}</StepLabel>
+//               </Step>
+//             ))}
+//           </Stepper>
+//           {this.state.currentState === steps.length
+//             ? (
+//               <React.Fragment>
+//                 <Typography variant="h5" gutterBottom>
+//                   Thank you for your order.
+//                 </Typography>
+//                 <Typography variant="subtitle1">
+//                   Your order number is #2001539. We have emailed your order
+//                   confirmation, and will send you an update when your order has
+//                   shipped.
+//                 </Typography>
+//               </React.Fragment>
+//               )
+//             : (
+//               <>
+//                 {getStepContent(this.state.currentState)}
+//                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+//                   <Button sx={{ mt: 3, ml: 1 }}>
+//                     Back
+//                   </Button>
+//                   <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='submmit'>
+//                     {this.state.currentState === steps.length - 1 ? 'Place order' : 'Next'}
+//                   </Button>
+//                 </Box>
 
-              </>
-              )}
-        </Paper>
-      </Container>
+//               </>
+//               )}
+//         </Paper>
+//       </Container>
 
-    );
-  }
-}
+//     );
+//   }
+// }
