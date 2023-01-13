@@ -31,12 +31,12 @@ export default function CheckoutPage() {
   };
 
   return (
-    <>
+    <div>
       {clientSecret && (
       <Elements options={options} stripe={stripePromiseRef.current}>
         <InjectedForm />
       </Elements>
-      )};
-    </>
+      )}
+    </div>
   );
 }
