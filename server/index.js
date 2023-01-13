@@ -144,33 +144,6 @@ app.get('/api/cart', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/address/:id', (req, res, next) => {
-  const sql = `
-    select "userId",
-            "email",
-            "firstName",
-            "lastName",
-            "address",
-            "address2",
-            "city",
-            "state",
-            "zipCode",
-            "country"
-        from "usersAddress"
-        where "userId" = $1
-  `;
-  const params = [Number(req.params.id)];
-  db.query(sql, params)
-    .then(result => {
-      const address = result.rows[0];
-      if (!address) {
-        throw new ClientError(404, 'Order is not found');
-      }
-      res.status(200).json(address);
-    })
-    .catch(err => next(err));
-});
-
 app.use(authMiddleware);
 
 app.delete('/api/cartItems/:itemId', (req, res, next) => {

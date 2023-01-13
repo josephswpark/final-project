@@ -35,54 +35,7 @@ const styles = {
 };
 
 export default class Confirmation extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.orderSummary = this.orderSummary.bind(this);
-  // }
-
-  // orderSummary(props) {
-  //   const address = this.state.address;
-  //   console.log(this.state);
-  //   return (
-  //     <Container maxWidth='xs' style={{ marginTop: '2.5rem' }} >
-  //       <Typography gutterBottom variant='h6' style={{ fontFamily: 'eczar', marginBottom: 0 }}>
-  //         Details:
-  //       </Typography>
-  //       <Divider variant='fullWidth' style={{ marginTop: '0.5rem', marginBottom: '1rem' }} />
-  //       <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }} >
-  //         <div style={{ justifyContent: 'space-between' }} >
-  //           <Typography style={{ fontFamily: 'eczar', fontWeight: 'bold' }} variant="subtitle1" gutterBottom >
-  //             Shipping
-  //           </Typography>
-  //           <Typography style={styles.font} variant="body1">
-  //             {address.firstName} {address.lastName} <br/>
-  //             {address.address} {address.address2} <br/>
-  //             {address.city} {address.state}, {address.zipCode}
-  //           </Typography>
-  //         </div>
-  //       </Grid>
-  //       <Divider variant='fullWidth' style={{ marginTop: '1rem', marginBottom: '1rem' }} />
-  //       <div style={{ display: 'flex', justifyContent: 'flex-end' }} >
-  //         <Typography style={{ fontFamily: 'eczar', marginRight: '0.5rem', fontWeight: 'bold' }} variant="subtitle1" guterrBottom>
-  //           Total:
-  //         </Typography>
-  //         <Typography style={styles.font}>${this.state.address.totalCost}</Typography>
-  //       </div>
-  //       <Divider variant='fullWidth' style={{ marginTop: '0.5rem' }} />
-  //       <Grid item xs={12}>
-  //         <div style={{ display: 'flex', justifyContent: 'flex-end' }} >
-  //           <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='click' style={{ fontFamily: 'eczar' }} href='#home'>
-  //             CONTINUE SHOPPING!
-  //           </Button>
-  //         </div>
-  //       </Grid>
-  //     </Container>
-  //   );
-  // }
-
   render() {
-    // const cartInfo = this.state.address;
-    // if (this.state.loading) return null;
     return (
       <>
         <Paper style={styles.paperContainer}>
