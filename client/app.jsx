@@ -13,12 +13,9 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       route: parseRoute(window.location.hash),
-      cart: null,
-      isOpen: false
+      cart: null
     };
     this.renderPage = this.renderPage.bind(this);
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -36,15 +33,6 @@ export default class App extends React.Component {
       this.setState({ cart: tokenStored });
     }
 
-  }
-
-  openModal() {
-    this.setState({ isOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ isOpen: false });
-    window.location.search = '';
   }
 
   renderPage() {

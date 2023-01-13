@@ -6,13 +6,18 @@ import Container from '@mui/material/Container';
 import Image from '../../server/public/shop-img.jpeg';
 import Paper from '@mui/material/Paper';
 import NavBar from '../components/NavBar';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const styles = {
   paperContainer: {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    height: '30vh',
+    height: '300px',
     backgroundImage: `url(${Image})`
   },
   shopAll: {
@@ -26,6 +31,10 @@ const styles = {
     width: '100%',
     cursor: 'pointer',
     textAlign: 'center'
+  },
+  font: {
+    fontFamily: 'eczar',
+    fontStyle: 'italic'
   }
 };
 
@@ -68,8 +77,10 @@ export default class Products extends React.Component {
         </Paper>
 
         <Container maxWidth='lg'>
-
-          <ImageList style={{ gap: 20 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }}>
+          <Grid item xs={12} style={{ marginTop: '2rem' }}>
+            <CustomSeparator/>
+          </Grid>
+          <ImageList style={{ gap: 20, marginTop: 0 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
             {productList.map(item => (
               <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
                 <ImageListItem>
@@ -91,4 +102,32 @@ export default class Products extends React.Component {
       </>
     );
   }
+}
+
+function CustomSeparator() {
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="inherit" href="#home" style={styles.font}>
+      Home
+    </Link>,
+    <Link
+      underline="hover"
+      key="2"
+      color="text.primary"
+      href="#products"
+      style={styles.font}
+    >
+      Products
+    </Link>
+  ];
+
+  return (
+    <Stack spacing={2}>
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+      >
+        {breadcrumbs}
+      </Breadcrumbs>
+    </Stack>
+  );
 }

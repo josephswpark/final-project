@@ -10,6 +10,9 @@ import { createTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import CartModal from '../components/cart-modal';
 import jwtDecode from 'jwt-decode';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const theme = createTheme({
   palette: {
@@ -160,6 +163,9 @@ export default class ProductDetails extends React.Component {
           <NavBar qty={shoe.length} />
         </Paper>
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>
+          <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
+            <CustomSeparator />
+          </Grid>
           <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
             <Grid item xs={5} >
               <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
@@ -205,4 +211,40 @@ export default class ProductDetails extends React.Component {
     )
     ;
   }
+}
+
+function CustomSeparator() {
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="inherit" href="#home" style={{ fontFamily: 'eczar' }}>
+      Home
+    </Link>,
+    <Link
+      underline="hover"
+      key="2"
+      color="inherit"
+      href="#products"
+      style={{ fontFamily: 'eczar' }}
+    >
+      Products
+    </Link>,
+    <Link
+      underline="hover"
+      key="3"
+      color="text.primary"
+      style={{ fontFamily: 'eczar', cursor: 'pointer' }}
+    >
+      Product Details
+    </Link>
+  ];
+
+  return (
+    <Stack spacing={2}>
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+      >
+        {breadcrumbs}
+      </Breadcrumbs>
+    </Stack>
+  );
 }
