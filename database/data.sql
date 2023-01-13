@@ -14,7 +14,10 @@ values ('1', 'DZ5485-612', 'Jordan 1 Retro High OG Lost and Found', '500', 'http
   ('13', 'GW3354', 'Yeezy Foam RNNR Ochre', '250', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-foam-rnnr-ochre-31835788_2048x2048.jpg?v=1671054669', 'Yeezy'),
   ('14', 'HQ6448', 'Yeezy Slide Onyx', '245', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-slide-onyx-31835802_2048x2048.jpg?v=1671054714', 'Yeezy'),
   ('15', 'AQ4832', 'Yeezy 350 Turtledove', '450', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-350-turtledove-2022-31835742_2048x2048.jpg?v=1671054525', 'Yeezy'),
-  ('16', 'GV7903', 'Yeezy Foam RNNR Mineral Blue', '300', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-foam-rnnr-mineral-blue-31835784_2048x2048.jpg?v=1671054657', 'Yeezy');
+  ('16', 'GV7903', 'Yeezy Foam RNNR Mineral Blue', '300', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-foam-rnnr-mineral-blue-31835784_2048x2048.jpg?v=1671054657', 'Yeezy'),
+  ('17', 'BB550ALD', 'New Balance 550 Aime Leon Dore White Green', '425', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/new-balance-550-aime-leon-dore-white-green-31834236_2048x2048.png?v=1671048126', 'New Balance'),
+  ('18', 'BB550LWT', 'New Balance 550 Cream Black', '220', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/new-balance-550-cream-black-31834240_2048x2048.jpg?v=1671048139', 'New Balance');
+
 
 insert into "sizes" ("productId", "size")
   values ('1', '8'),
@@ -129,4 +132,23 @@ insert into "sizes" ("productId", "size")
 ('16', '9'),
 ('16', '10'),
 ('16', '10.5'),
-('16', '11.5');
+('16', '11.5'),
+
+('17', '7'),
+('17', '8'),
+('17', '9'),
+('17', '10'),
+('17', '10.5'),
+('17', '11.5'),
+
+('17', '7'),
+('17', '8'),
+('17', '9'),
+('17', '10'),
+('17', '10.5'),
+('17', '11.5'),
+
+('18', '7'),
+('18', '8'),
+('18', '9.5'),
+('18', '10');

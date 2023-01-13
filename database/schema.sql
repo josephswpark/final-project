@@ -75,7 +75,7 @@ CREATE TABLE "public"."cart" (
 ) WITH (
   OIDS=FALSE
 );
-d
+
 
 
 CREATE TABLE "public"."usersAddress" (
