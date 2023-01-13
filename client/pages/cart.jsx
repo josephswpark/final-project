@@ -13,6 +13,10 @@ import Total from '../lib/total';
 import { createTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import TrashIcon from '@mui/icons-material/DeleteOutlined';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const theme = createTheme({
   palette: {
@@ -75,6 +79,7 @@ export default class Cart extends React.Component {
     };
     this.orderSummary = this.orderSummary.bind(this);
     this.delete = this.delete.bind(this);
+    this.CustomSeparator = this.CustomSeparator.bind(this);
   }
 
   componentDidMount() {
@@ -102,6 +107,51 @@ export default class Cart extends React.Component {
       .then(res => res.json())
       .then(cart => this.setState({ cartItems: cart }))
       .catch(err => console.error(err));
+  }
+
+  CustomSeparator() {
+    const breadcrumbs = [
+      <Link underline="hover" key="1" color="inherit" href="#home" style={styles.font}>
+        Home
+      </Link>,
+      <Link
+        underline="hover"
+        key="2"
+        color='inherit'
+        href="#products"
+        style={styles.font}
+      >
+        Products
+      </Link>,
+      <Link
+        underline="hover"
+        key="3"
+        color="inherit"
+        style={{ fontFamily: 'eczar', cursor: 'pointer' }}
+      >
+        Product Details
+      </Link>,
+      <Link
+        underline="hover"
+        key="3"
+        color="text.primary"
+        href="#cart"
+        style={styles.font}
+      >
+        Cart
+      </Link>
+    ];
+
+    return (
+      <Stack spacing={2}>
+        <Breadcrumbs
+          separator={<NavigateNextIcon fontSize="small" />}
+          aria-label="breadcrumb"
+        >
+          {breadcrumbs}
+        </Breadcrumbs>
+      </Stack>
+    );
   }
 
   orderSummary(props) {
@@ -155,6 +205,9 @@ export default class Cart extends React.Component {
             <NavBar/>
           </Paper>
           <Container maxWidth='lg'>
+            <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
+              {this.CustomSeparator()}
+            </Grid>
             <div style={{ display: 'flex' }}>
               <h3>Bag</h3>
               <p style={{ marginLeft: '0.65rem', marginTop: '1.3rem' }}>{this.state.cartItems.length} item(s)</p>
@@ -201,6 +254,9 @@ export default class Cart extends React.Component {
           </Paper>
 
           <Container maxWidth='lg'>
+            <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
+              {this.CustomSeparator()}
+            </Grid>
             <div style={{ display: 'flex' }}>
               <h3>Bag</h3>
               <p style={{ marginLeft: '0.65rem', marginTop: '1.3rem' }}>{this.state.cartItems.length} item(s)</p>
@@ -263,3 +319,48 @@ export default class Cart extends React.Component {
     }
   }
 }
+
+// function CustomSeparator() {
+//   const breadcrumbs = [
+//     <Link underline="hover" key="1" color="inherit" href="#home" style={styles.font}>
+//       Home
+//     </Link>,
+//     <Link
+//       underline="hover"
+//       key="2"
+//       color='inherit'
+//       href="#products"
+//       style={styles.font}
+//     >
+//       Products
+//     </Link>,
+//     <Link
+//       underline="hover"
+//       key="3"
+//       color="inherit"
+//       style={{ fontFamily: 'eczar', cursor: 'pointer' }}
+//     >
+//       Product Details
+//     </Link>,
+//     <Link
+//       underline="hover"
+//       key="3"
+//       color="text.primary"
+//       href="#cart"
+//       style={styles.font}
+//     >
+//       Cart
+//     </Link>
+//   ];
+
+//   return (
+//     <Stack spacing={2}>
+//       <Breadcrumbs
+//         separator={<NavigateNextIcon fontSize="small" />}
+//         aria-label="breadcrumb"
+//       >
+//         {breadcrumbs}
+//       </Breadcrumbs>
+//     </Stack>
+//   );
+// }
