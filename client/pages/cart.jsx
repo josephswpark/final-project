@@ -246,7 +246,7 @@ export default class Cart extends React.Component {
                         <Grid item xs container direction="column" spacing={2} >
                           <Grid item style={{ maxWidth: '340px' }}>
                             {this.orderSummary()}
-                            <Button variant='contained' theme={theme} color='primary' style={{ width: '320px', marginTop: '2rem', fontFamily: 'ezcar' }}>
+                            <Button href='#checkout' variant='contained' theme={theme} color='primary' style={{ width: '320px', marginTop: '2rem', fontFamily: 'ezcar' }}>
                               GO TO CHECKOUT • ${total.total}
                             </Button>
                           </Grid>

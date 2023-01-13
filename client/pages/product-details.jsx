@@ -49,14 +49,14 @@ export default class ProductDetails extends React.Component {
       size: null,
       isOpen: false,
       quantity: 1,
-      cart: null
+      cart: null,
+      cartItems: []
     };
     this.sizes = this.sizes.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.addToCart = this.addToCart.bind(this);
-    // this.updateQty = this.updateQty.bind(this);
   }
 
   componentDidMount() {
@@ -67,7 +67,17 @@ export default class ProductDetails extends React.Component {
     const token = window.localStorage.getItem('token');
     const tokenStored = token ? jwtDecode(token) : null;
     this.setState({ cart: tokenStored });
-
+    if (token) {
+      fetch('/api/cart', {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': token
+        }
+      })
+        .then(res => res.json())
+        .then(cart => this.setState({ cartItems: cart }))
+        .catch(err => console.error(err));
+    }
   }
 
   handleChange(event) {
@@ -118,12 +128,6 @@ export default class ProductDetails extends React.Component {
     }
   }
 
-  // updateQty(event) {
-  //   if (event.target.className.includes('MuiButtonBase-root') && this.state.size !== null) {
-  //     this.setState(prevState => ({ quantity: this.state.quantity + 1 }));
-  //   }
-  // }
-
   openModal() {
     this.setState({ isOpen: true });
   }
@@ -148,14 +152,13 @@ export default class ProductDetails extends React.Component {
 
   render() {
     const product = this.state.product;
+    const shoe = this.state.cartItems;
     if (this.state.loading) return null;
-
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar />
+          <NavBar qty={shoe.length} />
         </Paper>
-
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>
           <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
             <Grid item xs={5} >
@@ -196,7 +199,6 @@ export default class ProductDetails extends React.Component {
             </form>
           </Grid>
         </Container>
-
         <CartModal qty={this.state.quantity} productinfo={this.state.product}
         size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
       </>
