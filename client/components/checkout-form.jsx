@@ -10,13 +10,15 @@ import ImageList from '@mui/material/ImageList';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import Cart from '../pages/cart';
-// import Stepper from '@mui/material/Stepper';
-// import Step from '@mui/material/Step';
-// import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { ElementsConsumer, PaymentElement } from '@stripe/react-stripe-js';
+
+const steps = ['Shipping Address', 'Payment Information'];
 
 const theme = createTheme({
   palette: {
@@ -331,9 +333,16 @@ class AddressForm extends React.Component {
   render() {
     return (
       <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }} >
+        <Stepper sx={{ pt: '1rem', pb: '1.5rem' }} style={{ maxWidth: '550px' }} activeStep={0} alternativeLabel>
+          {steps.map(label => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
         <Grid sx={{ pt: 0, pb: 1.5 }} style={{ maxWidth: '550px' }}>
           <Typography variant="h6" gutterBottom style={{ marginBottom: '1rem', fontFamily: 'eczar' }}>
-            Shipping address
+            Shipping Address
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -495,6 +504,13 @@ class PaymentForm extends React.Component {
     return (
       <Container maxWidth='sm'>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }} >
+          <Stepper sx={{ pt: '1rem', pb: '1.5rem' }} style={{ maxWidth: '550px' }} activeStep={1} alternativeLabel>
+            {steps.map(label => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
           <Typography variant="h6" gutterBottom style={{ fontFamily: 'eczar' }}>
             Payment Information
           </Typography>
@@ -509,8 +525,6 @@ class PaymentForm extends React.Component {
     );
   }
 }
-
-// const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
 // function getStepContent(step) {
 //   switch (step) {
