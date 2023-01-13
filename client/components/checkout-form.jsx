@@ -218,7 +218,7 @@ class Checkout extends React.Component {
     event.preventDefault();
     const token = window.localStorage.getItem('token');
     const total = Total(this.state.cartItems);
-    const address2 = this.state.address2 === '' ? null : this.state.address2;
+    const address2 = this.state.address2 === '' ? '' : this.state.address2;
     const body = {
       email: this.state.email,
       firstName: this.state.firstName,
@@ -237,10 +237,11 @@ class Checkout extends React.Component {
     if (!stripe || !elements) {
       return;
     }
+
     stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: new URL('#home', window.location).href
+        return_url: new URL('#confirmation', window.location).href
       }
     })
       .catch(err => console.error(err));
@@ -266,7 +267,7 @@ class Checkout extends React.Component {
       return (
         <>
           <Paper style={styles.paperContainer}>
-            <NavBar qty={shoe.length} />
+            <NavBar qty={shoe.length} style={{ display: 'none' }} />
           </Paper>
           <ThemeProvider theme={theme}>
             <Container>
@@ -310,12 +311,14 @@ class Checkout extends React.Component {
                 Checkout
               </Typography>
             </Container>
-            <Container maxWidth='lg'>
-              <Grid container>
-                <PaymentForm/>
-                {this.orderSummary()}
-              </Grid>
-            </Container>
+            <form onSubmit={this.handleSubmit}>
+              <Container maxWidth='lg'>
+                <Grid container>
+                  <PaymentForm/>
+                  {this.orderSummary()}
+                </Grid>
+              </Container>
+            </form>
           </ThemeProvider>
           {this.Copyright()}
         </>
@@ -497,7 +500,7 @@ class PaymentForm extends React.Component {
           </Typography>
           <PaymentElement />
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }} >
-            <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='submit' style={{ fontFamily: 'eczar' }}>
+            <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='submit' style={{ fontFamily: 'eczar' }} onSubmit={this.props.onSubmit}>
               PLACE ORDER
             </Button>
           </Box>

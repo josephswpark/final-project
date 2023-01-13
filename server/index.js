@@ -144,6 +144,33 @@ app.get('/api/cart', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/address/:id', (req, res, next) => {
+  const sql = `
+    select "userId",
+            "email",
+            "firstName",
+            "lastName",
+            "address",
+            "address2",
+            "city",
+            "state",
+            "zipCode",
+            "country"
+        from "usersAddress"
+        where "userId" = $1
+  `;
+  const params = [Number(req.params.id)];
+  db.query(sql, params)
+    .then(result => {
+      const address = result.rows[0];
+      if (!address) {
+        throw new ClientError(404, 'Order is not found');
+      }
+      res.status(200).json(address);
+    })
+    .catch(err => next(err));
+});
+
 app.use(authMiddleware);
 
 app.delete('/api/cartItems/:itemId', (req, res, next) => {
@@ -224,35 +251,6 @@ app.post('/api/checkout', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-
-// app.get('/api/cost', (req, res, next) => {
-//   const { cartId } = req.cartId;
-//   const sql = `
-//     select sum("price")
-//       from "shoes"
-//       join "cartItems" using("productId")
-//       join  "cart" using("cartId")
-//       where "cartId" = $1
-//   `;
-//   const params = [cartId];
-//   db.query(sql, params)
-//     .then(result => {
-//       const costs = {};
-//       costs.subtotal = Number(result.rows[0].sum / 100);
-//       costs.taxes = (costs.subtotal * 0.0775).toFixed(2);
-//       costs.total = Number((costs.subtotal + Number((costs.taxes))).toFixed(2));
-//       costs.subtotal = Number(costs.subtotal.toFixed(2)).toLocaleString('en', {
-//         minimumFractionDigits: 2
-//       });
-//       costs.total = Number(costs.total.toFixed(2)).toLocaleString('en', {
-//         minimumFractionDigits: 2
-//       });
-//       res.json(costs);
-//     })
-//     .catch(err => next(err));
-// });
-// const orderId = result.rows[0];
-// res.status(200).json(orderId);
 
 app.get('/api/cost', (req, res, next) => {
   const { cartId } = req.cartId;

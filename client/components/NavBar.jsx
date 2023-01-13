@@ -28,7 +28,7 @@ export default class NavBar extends React.Component {
             </Button>
           </Grid>
           <Grid container direction='row' justifyContent='right' alignItems='center' item xs={4.5} className='icon-menu' >
-            <IconButton aria-label='search' href='#search'><SearchIcon sx={{ color: 'white' }} /></IconButton>
+            <IconButton aria-label='search' href='#search' style={this.props.style}><SearchIcon sx={{ color: 'white' }} /></IconButton>
             <IconButton aria-label="cart" href='#cart'>
               <StyledBadge badgeContent={this.props.qty} color="primary">
                 <ShoppingBagIcon sx={{ color: 'white' }}/>

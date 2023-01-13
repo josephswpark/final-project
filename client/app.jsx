@@ -6,6 +6,7 @@ import ProductDetails from './pages/product-details';
 import jwtDecode from 'jwt-decode';
 import Cart from '../client/pages/cart';
 import Checkout from './pages/checkout';
+import Confirmation from './pages/confirmation';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -67,6 +68,9 @@ export default class App extends React.Component {
     }
     if (path === 'checkout') {
       return <Checkout />;
+    }
+    if (path === 'confirmation') {
+      return <Confirmation />;
     }
   }
 

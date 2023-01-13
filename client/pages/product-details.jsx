@@ -57,7 +57,6 @@ export default class ProductDetails extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.addToCart = this.addToCart.bind(this);
-    // this.updateQty = this.updateQty.bind(this);
   }
 
   componentDidMount() {
