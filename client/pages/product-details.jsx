@@ -194,7 +194,7 @@ export default class ProductDetails extends React.Component {
                   style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }}>
                   ADD TO CART
                 </Button>
-                <div>
+                <div style={{ marginBottom: '3rem' }}>
                   <ul style={{ width: '345px' }}>
                     <li key='sku'><p>SKU: {product.sku}</p></li>
                     <li key='authentic'><p>100% Authencity Guaranteed</p></li>
