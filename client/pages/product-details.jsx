@@ -28,7 +28,9 @@ const styles = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '30vh',
-    backgroundImage: `url(${Image})`
+    backgroundImage: `url(${Image})`,
+    borderRadius: 0
+
   },
   infoStyle: {
     fontFamily: 'eczar',

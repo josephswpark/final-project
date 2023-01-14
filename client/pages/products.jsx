@@ -20,7 +20,8 @@ const styles = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '300px',
-    backgroundImage: `url(${Image})`
+    backgroundImage: `url(${Image})`,
+    borderRadius: 0
   },
   shopAll: {
     textAlign: 'center',

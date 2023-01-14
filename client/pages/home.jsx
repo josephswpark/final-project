@@ -9,7 +9,8 @@ const styles = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '100vh',
-    backgroundImage: `url(${Image})`
+    backgroundImage: `url(${Image})`,
+    borderRadius: 0
   }
 };
 
