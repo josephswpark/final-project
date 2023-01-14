@@ -191,7 +191,7 @@ export default class ProductDetails extends React.Component {
                   {this.sizes()}
                 </Stack>
                 <Button type='submit' theme={theme} color='primary' variant='contained'
-                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }}>
+                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }} onClick={this.updateQty}>
                   ADD TO CART
                 </Button>
                 <div>

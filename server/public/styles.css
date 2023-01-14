@@ -38,9 +38,3 @@ ul {
 li {
   line-height: 0.8;
 }
-
-/* stylelint-disable-next-line selector-class-pattern */
-.MuiSvgIcon-fontSizeSmall:hover {
-  transform: rotate(90deg);
-  transition: all 0.25s ease-in-out;
-}

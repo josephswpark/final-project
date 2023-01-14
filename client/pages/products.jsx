@@ -11,8 +11,6 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
-import IconButton from '@mui/material/IconButton';
 
 const styles = {
   paperContainer: {
@@ -74,15 +72,13 @@ export default class Products extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} open={this.openModal} />
+          <NavBar qty={shoe.length} />
           <h1 style={styles.shopAll}>Shop All Sneakers</h1>
         </Paper>
+
         <Container maxWidth='lg'>
-          <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
+          <Grid item xs={12} style={{ marginTop: '2rem' }}>
             <CustomSeparator/>
-            <IconButton >
-              <TuneOutlinedIcon/>
-            </IconButton>
           </Grid>
           <ImageList style={{ gap: 20, marginTop: 0 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
             {productList.map(item => (
