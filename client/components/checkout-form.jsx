@@ -75,7 +75,8 @@ class Checkout extends React.Component {
       country: '',
       costs: {},
       cartItems: [],
-      currentState: 0
+      currentState: 0,
+      isOpen: false
     };
     this.orderSummary = this.orderSummary.bind(this);
     this.cart = this.cart.bind(this);
@@ -525,69 +526,3 @@ class PaymentForm extends React.Component {
     );
   }
 }
-
-// function getStepContent(step) {
-//   switch (step) {
-//     case 0:
-//       return <AddressForm />;
-//     // case 1:
-//     //   return <PaymentForm />;
-//     // case 2:
-//     //   return <OrderSummary />;
-//     // default:
-//     //   throw new Error('Unknown step');
-//   }
-// }
-
-// class Steps extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       currentState: 0
-//     };
-//   }
-
-//   render() {
-//     return (
-//       <Container component="main" maxWidth="sm" sx={{}}>
-//         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-//           <Stepper sx={{ pt: 3, pb: 5 }} style={{ maxWidth: '550px' }}>
-//             {steps.map(label => (
-//               <Step key={label}>
-//                 <StepLabel>{label}</StepLabel>
-//               </Step>
-//             ))}
-//           </Stepper>
-//           {this.state.currentState === steps.length
-//             ? (
-//               <React.Fragment>
-//                 <Typography variant="h5" gutterBottom>
-//                   Thank you for your order.
-//                 </Typography>
-//                 <Typography variant="subtitle1">
-//                   Your order number is #2001539. We have emailed your order
-//                   confirmation, and will send you an update when your order has
-//                   shipped.
-//                 </Typography>
-//               </React.Fragment>
-//               )
-//             : (
-//               <>
-//                 {getStepContent(this.state.currentState)}
-//                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-//                   <Button sx={{ mt: 3, ml: 1 }}>
-//                     Back
-//                   </Button>
-//                   <Button variant="contained" sx={{ mt: 3, ml: 1 }} type='submmit'>
-//                     {this.state.currentState === steps.length - 1 ? 'Place order' : 'Next'}
-//                   </Button>
-//                 </Box>
-
-//               </>
-//               )}
-//         </Paper>
-//       </Container>
-
-//     );
-//   }
-// }
