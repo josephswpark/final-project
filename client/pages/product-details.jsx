@@ -160,7 +160,7 @@ export default class ProductDetails extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} />
+          <NavBar qty={shoe.length} open={this.openModal}/>
         </Paper>
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>
           <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
@@ -191,7 +191,7 @@ export default class ProductDetails extends React.Component {
                   {this.sizes()}
                 </Stack>
                 <Button type='submit' theme={theme} color='primary' variant='contained'
-                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }} onClick={this.updateQty}>
+                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }}>
                   ADD TO CART
                 </Button>
                 <div style={{ marginBottom: '3rem' }}>
