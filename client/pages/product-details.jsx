@@ -30,7 +30,6 @@ const styles = {
     height: '30vh',
     backgroundImage: `url(${Image})`,
     borderRadius: 0
-
   },
   infoStyle: {
     fontFamily: 'eczar',

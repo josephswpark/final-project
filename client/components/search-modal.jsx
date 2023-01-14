@@ -1,13 +1,22 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
 import Drawer from '@mui/material/Drawer';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
+import SearchIcon from '@mui/icons-material/SearchOutlined';
+import Container from '@mui/material/Container';
 
+const styles = {
+  xIcon: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '0.5rem',
+    marginRight: '0.5rem',
+    cursor: 'pointer'
+  }
+};
 export default function CartModal(props) {
   return (
     <Drawer {...props}
@@ -15,33 +24,33 @@ export default function CartModal(props) {
       open={props.open}
       onClose={props.onClose}
     >
-      <Box style={{ width: 390 }}>
-        <IconButton aria-label="exit" onClick={props.onClose} size='small' >
-          <CloseIcon fontSize='small' />
-        </IconButton>
-        {/* <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '25ch' }
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <InputLabel htmlFor="standard-adornment-search">Search</InputLabel>
-          <TextField id="standard-basic" variant="standard" />
-          </Box> */}
-        <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '25ch' }}>
-          <Input
+      <Box style={{ width: '390px' }}>
+        <span style={styles.xIcon }>
+          <CloseIcon onClick={props.onClose} className='xIcon'/>
+        </span>
+        <Container style={{ marginLeft: '1.2rem' }}>
+          <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '300px' }} >
+            <Input placeholder='Search our store'
             id="standard-adornment-weight"
-            endAdornment={<InputAdornment position="end">kg</InputAdornment>}
+            endAdornment={<InputAdornment position="end"><SearchIcon /></InputAdornment>}
             aria-describedby="standard-weight-helper-text"
             inputProps={{
-              'aria-label': 'weight'
-            }}
+              'aria-label': 'weight',
+              type: 'search'
+            }} style={{ fontFamily: 'eczar' }}
           />
-          <FormHelperText id="standard-weight-helper-text">Weight</FormHelperText>
-        </FormControl>
-
+            <div>
+              <h4>Popular searches</h4>
+              <ul style={{ marginTop: 0, paddingLeft: 0 }}>
+                <p className='brands'>Jordan</p>
+                <p className='brands'>Nike</p>
+                <p className='brands'>Yeezy</p>
+                <p className='brands'>Adidas</p>
+                <p className='brands'>New Balance</p>
+              </ul>
+            </div>
+          </FormControl>
+        </Container>
       </Box>
     </Drawer>
   );

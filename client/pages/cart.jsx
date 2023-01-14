@@ -276,16 +276,17 @@ export default class Cart extends React.Component {
                         <Grid item xs={12} container>
                           <Grid item container direction="column" spacing={2} >
                             <Grid item xs style={{ paddingTop: '2.5rem', paddingLeft: '1rem' }}>
-                              <Typography style={{ fontFamily: 'eczar', paddingRight: '0.4rem' }} gutterBottom variant="subtitle1" component="div">
-                                {item.name}
-                              </Typography>
+                              <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                                <Typography style={{ fontFamily: 'eczar', paddingRight: '0.4rem' }} gutterBottom variant="subtitle1" component="div">
+                                  {item.name}
+                                </Typography>
+                              </a>
                               <Typography style={styles.font} variant="body1" gutterBottom>
                                 ${item.price}
                               </Typography>
                               <Typography style={styles.font} variant="body2" color="text.secondary">
                                 Size: {item.size}
                               </Typography>
-
                               <IconButton key={item.itemId} aria-label="trash" onClick={this.delete} data-id={item.itemId} data-size={item.size}>
                                 <TrashIcon data-id={item.itemId} data-size={item.size}/>
                               </IconButton>
