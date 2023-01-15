@@ -203,7 +203,7 @@ export default class Cart extends React.Component {
       return (
         <>
           <Paper style={styles.paperContainer}>
-            <NavBar/>
+            <NavBar style={{ display: 'none' }} />
           </Paper>
           <Container maxWidth='lg'>
             <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
@@ -251,7 +251,7 @@ export default class Cart extends React.Component {
       return (
         <>
           <Paper style={styles.paperContainer}>
-            <NavBar qty={shoe.length} />
+            <NavBar qty={shoe.length} style={{ display: 'none' }} />
           </Paper>
 
           <Container maxWidth='lg'>
@@ -288,7 +288,7 @@ export default class Cart extends React.Component {
                                 Size: {item.size}
                               </Typography>
                               <IconButton key={item.itemId} aria-label="trash" onClick={this.delete} data-id={item.itemId} data-size={item.size}>
-                                <TrashIcon data-id={item.itemId} data-size={item.size}/>
+                                <TrashIcon data-id={item.itemId} data-size={item.size} />
                               </IconButton>
                             </Grid>
                           </Grid>
