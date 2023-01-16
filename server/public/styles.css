@@ -51,5 +51,6 @@ h4 {
 }
 
 .brands {
-  line-height: 1rem;
+  line-height: 0.5rem;
+  margin-top: 0;
 }

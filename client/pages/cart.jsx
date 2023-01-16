@@ -288,7 +288,7 @@ export default class Cart extends React.Component {
                                 Size: {item.size}
                               </Typography>
                               <IconButton key={item.itemId} aria-label="trash" onClick={this.delete} data-id={item.itemId} data-size={item.size}>
-                                <TrashIcon data-id={item.itemId} data-size={item.size} />
+                                <TrashIcon data-id={item.itemId} data-size={item.size}/>
                               </IconButton>
                             </Grid>
                           </Grid>
