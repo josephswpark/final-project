@@ -69,6 +69,13 @@ const styles = {
     boxShadow: '0 0.25rem 0.5rem rgba(0, 0, 0, 0.15)',
     backgroundColor: theme =>
       theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
+  },
+  xIcon: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '0.5rem',
+    marginRight: '0.5rem',
+    cursor: 'pointer'
   }
 };
 
@@ -76,11 +83,14 @@ export default class Cart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cartItems: []
+      cartItems: [],
+      isOpen: false
     };
     this.orderSummary = this.orderSummary.bind(this);
     this.delete = this.delete.bind(this);
     this.CustomSeparator = this.CustomSeparator.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -108,6 +118,14 @@ export default class Cart extends React.Component {
       .then(res => res.json())
       .then(cart => this.setState({ cartItems: cart }))
       .catch(err => console.error(err));
+  }
+
+  openModal() {
+    this.setState({ isOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isOpen: false });
   }
 
   CustomSeparator() {
@@ -203,7 +221,7 @@ export default class Cart extends React.Component {
       return (
         <>
           <Paper style={styles.paperContainer}>
-            <NavBar/>
+            <NavBar onClick={this.openModal} onClose={this.closeModal}/>
           </Paper>
           <Container maxWidth='lg'>
             <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
@@ -251,7 +269,7 @@ export default class Cart extends React.Component {
       return (
         <>
           <Paper style={styles.paperContainer}>
-            <NavBar qty={shoe.length} />
+            <NavBar qty={shoe.length} onClick={this.openModal} onClose={this.closeModal} />
           </Paper>
 
           <Container maxWidth='lg'>
@@ -276,16 +294,17 @@ export default class Cart extends React.Component {
                         <Grid item xs={12} container>
                           <Grid item container direction="column" spacing={2} >
                             <Grid item xs style={{ paddingTop: '2.5rem', paddingLeft: '1rem' }}>
-                              <Typography style={{ fontFamily: 'eczar', paddingRight: '0.4rem' }} gutterBottom variant="subtitle1" component="div">
-                                {item.name}
-                              </Typography>
+                              <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                                <Typography style={{ fontFamily: 'eczar', paddingRight: '0.4rem' }} gutterBottom variant="subtitle1" component="div">
+                                  {item.name}
+                                </Typography>
+                              </a>
                               <Typography style={styles.font} variant="body1" gutterBottom>
                                 ${item.price}
                               </Typography>
                               <Typography style={styles.font} variant="body2" color="text.secondary">
                                 Size: {item.size}
                               </Typography>
-
                               <IconButton key={item.itemId} aria-label="trash" onClick={this.delete} data-id={item.itemId} data-size={item.size}>
                                 <TrashIcon data-id={item.itemId} data-size={item.size}/>
                               </IconButton>

@@ -30,7 +30,6 @@ const styles = {
     height: '30vh',
     backgroundImage: `url(${Image})`,
     borderRadius: 0
-
   },
   infoStyle: {
     fontFamily: 'eczar',
@@ -85,6 +84,14 @@ export default class ProductDetails extends React.Component {
     }
   }
 
+  openModal() {
+    this.setState({ isOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isOpen: false });
+  }
+
   handleChange(event) {
     const { value } = event.target;
     this.setState({ size: Number(value) });
@@ -133,14 +140,6 @@ export default class ProductDetails extends React.Component {
     }
   }
 
-  openModal() {
-    this.setState({ isOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ isOpen: false });
-  }
-
   sizes() {
     const sizes = this.state.product.sizes;
     const sizeInputs = sizes.map(size => {
@@ -162,13 +161,13 @@ export default class ProductDetails extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} open={this.openModal}/>
+          <NavBar qty={shoe.length} />
         </Paper>
-        <Container maxWidth='md' style={{ marginTop: '1rem' }}>
+        <Container maxWidth='md' style={{ marginTop: '1.5rem' }}>
           <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
             <CustomSeparator />
           </Grid>
-          <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
+          <Grid container columns={{ xs: 4, sm: 8, md: 11 }} style={{ marginTop: '1rem', justifyContent: 'space-evenly' }}>
             <Grid item xs={5} >
               <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
                   src={product.imageUrl}
@@ -210,8 +209,7 @@ export default class ProductDetails extends React.Component {
         <CartModal qty={this.state.quantity} productinfo={this.state.product}
         size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
       </>
-    )
-    ;
+    );
   }
 }
 

@@ -40,7 +40,11 @@ li {
   line-height: 0.8;
 }
 
-.MuiSvgIcon-fontSizeSmall:hover {
+.xIcon:hover {
   transform: rotate(90deg);
   transition: all 0.25s ease-in-out;
+}
+
+h4 {
+  height: 15px;
 }
