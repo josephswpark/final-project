@@ -167,7 +167,7 @@ export default class ProductDetails extends React.Component {
           <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
             <CustomSeparator />
           </Grid>
-          <Grid container columns={{ xs: 4, sm: 8, md: 11 }} style={{ marginTop: '1rem' }}>
+          <Grid container columns={{ xs: 4, sm: 8, md: 11 }} style={{ marginTop: '1rem', justifyContent: 'space-evenly' }}>
             <Grid item xs={5} >
               <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
                   src={product.imageUrl}
