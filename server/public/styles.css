@@ -40,8 +40,7 @@ li {
   line-height: 0.8;
 }
 
-.xIcon:hover,
-.searchIcon:hover {
+.xIcon:hover {
   transform: rotate(90deg);
   transition: all 0.25s ease-in-out;
 }

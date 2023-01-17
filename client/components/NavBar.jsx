@@ -8,7 +8,6 @@ import StyledBadge from '@mui/material/Badge';
 import { Container } from '@mui/material';
 import Logo from '../../server/public/white-logo.svg';
 import Button from '@mui/material/Button';
-// import SearchModal from './search-modal';
 
 const styles = {
   navBar: {

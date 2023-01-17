@@ -11,11 +11,8 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-// import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
-// import IconButton from '@mui/material/IconButton';
 import { FormControl, Input, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/SearchOutlined';
-// import SearchModal from '../components/search-modal';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CloseIcon from '@mui/icons-material/Close';
@@ -33,7 +30,7 @@ const styles = {
     textAlign: 'center',
     fontFamily: 'eczar',
     color: 'white',
-    paddingTop: '2rem'
+    paddingTop: '2.5rem'
   },
   productStyle: {
     fontFamily: 'eczar',
@@ -54,6 +51,34 @@ const styles = {
   }
 };
 
+function Breadcrumb() {
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="inherit" href="#home" style={styles.font}>
+      Home
+    </Link>,
+    <Link
+      underline="hover"
+      key="2"
+      color="text.primary"
+      href="#products"
+      style={styles.font}
+    >
+      Products
+    </Link>
+  ];
+
+  return (
+    <Stack spacing={2} style={{ marginTop: '0.4rem' }}>
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+      >
+        {breadcrumbs}
+      </Breadcrumbs>
+    </Stack>
+  );
+}
+
 export default class Products extends React.Component {
   constructor(props) {
     super(props);
@@ -68,7 +93,7 @@ export default class Products extends React.Component {
     this.filterProducts = this.filterProducts.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    // this.SearchModal = this.SearchModal.bind(this);
+    this.searchModal = this.searchModal.bind(this);
   }
 
   componentDidMount() {
@@ -129,51 +154,64 @@ export default class Products extends React.Component {
     }
   }
 
-  // SearchModal() {
-  //   return (
-  //     <Drawer {...this}
-  //       anchor='right'
-  //       open={this.open}
-  //       onClose={this.onClose}
-  //     >
-  //       <Box style={{ width: '390px' }}>
-  //         <span style={styles.xIcon}>
-  //           <CloseIcon onClick={this.onClose} className='xIcon' />
-  //         </span>
-  //         <Container style={{ marginLeft: '1.2rem' }}>
-  //           <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '300px' }} >
-  //             <Input placeholder='Search our store'
-  //               id="standard-adornment-weight"
-  //               endAdornment={<InputAdornment position="end"><SearchIcon onClick={this.filterProducts} /></InputAdornment>}
-  //               aria-describedby="standard-weight-helper-text"
-  //               inputProps={{
-  //                 'aria-label': 'weight',
-  //                 type: 'search'
-  //               }}
-  //               style={{ fontFamily: 'eczar' }}
-  //               onChange={this.onSearchInputChange}
-  //               onKeyDown={this.filterProducts}
-  //             />
-  //             <div>
-  //               <h4>Popular searches</h4>
-  //               <ul style={{ marginTop: 0, paddingLeft: 0 }}>
-  //                 <p className='brands'>Jordan</p>
-  //                 <p className='brands'>Nike</p>
-  //                 <p className='brands'>Yeezy</p>
-  //                 <p className='brands'>Adidas</p>
-  //                 <p className='brands'>New Balance</p>
-  //               </ul>
-  //             </div>
-  //           </FormControl>
-  //         </Container>
-  //       </Box>
-  //     </Drawer>
-  //   );
-  // }
+  searchModal() {
+    const productList = this.state.filteredProductsList;
+    return (
+      <Drawer
+        {...this}
+        anchor='right'
+        open={this.state.isOpen}
+        onClose={this.closeModal}
+      >
+        <Box style={{ width: '390px' }}>
+          <span style={styles.xIcon}>
+            <CloseIcon onClick={this.closeModal} className='xIcon' />
+          </span>
+          <Container style={{ marginLeft: '1rem', justifyContent: 'center' }}>
+            <FormControl variant="standard" sx={{ m: 1, mt: 2, width: '300px' }} >
+              <Input placeholder='Search our store'
+                id="standard-adornment-weight"
+                endAdornment={<InputAdornment position="end"><SearchIcon onClick={this.filterProducts} style={{ cursor: 'pointer' }} /></InputAdornment>}
+                aria-describedby="standard-weight-helper-text"
+                inputProps={{
+                  'aria-label': 'weight',
+                  type: 'search'
+                }}
+                style={{ fontFamily: 'eczar' }}
+                onChange={this.onSearchInputChange}
+                onKeyDown={this.filterProducts}
+              />
+              <div style={{ lineHeight: '1rem' }}>
+                <p style={{ fontWeight: 'bold' }}>Popular searches</p>
+                <div style={{ marginTop: 0, paddingLeft: 0, display: 'flex' }}>
+                  <p className='brands'>Jordan Nike Yeezy New Balance</p>
+                </div>
+              </div>
+            </FormControl>
+          </Container>
+          <Grid style={{ marginTop: 0, marginLeft: '2rem' }}>
+            <ImageList style={{ marginTop: 0, width: '335px' }} >
+              {productList.map(item => (
+                <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black', width: '150px' }} key={item.productId} >
+                  <ImageListItem style={{ width: '150px' }}>
+                    <img style={{ width: '150px', height: '150px' }}
+                      src={item.imageUrl}
+                      srcSet={item.imageUrl}
+                      alt={item.title}
+                    />
+                  </ImageListItem>
+                </a>
+              ))}
+            </ImageList>
+          </Grid>
+
+        </Box>
+      </Drawer>
+    );
+  }
 
   render() {
     const unfillteredList = this.state.products;
-    const productList = this.state.filteredProductsList;
     const shoe = this.state.cartItems;
     return (
       <>
@@ -185,31 +223,12 @@ export default class Products extends React.Component {
         <Container maxWidth='lg'>
           <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
             <Breadcrumb />
-            {/* <FormControl variant="standard" sx={{ width: '165px' }} >
-              <Input placeholder='Search our store'
-                id="standard-adornment-weight"
-                endAdornment={<InputAdornment position="end">
-                  <SearchIcon onClick={this.filterProducts} style={{ cursor: 'pointer' }}/>
-                </InputAdornment>}
-                aria-describedby="standard-weight-helper-text"
-                inputProps={{
-                  'aria-label': 'weight',
-                  type: 'search'
-                }}
-                style={{ fontFamily: 'eczar' }}
-                onChange={this.onSearchInputChange}
-                onKeyDown={this.filterProducts}
-              />
-            </FormControl> */}
-            {/* <IconButton >
-              <TuneOutlinedIcon/>
-            </IconButton> */}
           </Grid>
-          <ImageList style={{ gap: 20, marginTop: 0 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
+          <ImageList style={{ gap: 11, marginTop: 0 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
             {unfillteredList.map(item => (
               <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                <ImageListItem>
-                  <img style={{ cursor: 'pointer' }}
+                <ImageListItem style={{ alignItems: 'center' }}>
+                  <img style={{ cursor: 'pointer', width: '300px' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
@@ -224,128 +243,8 @@ export default class Products extends React.Component {
             ))}
           </ImageList>
         </Container>
-        {/* <Drawer {...props}
-          anchor='right'
-          open={props.open}
-          onClose={props.onClose}
-        >
-          <Box style={{ width: '390px' }}>
-            <span style={styles.xIcon}>
-              <CloseIcon onClick={props.onClose} className='xIcon' />
-            </span>
-            <Container style={{ marginLeft: '1.2rem' }}>
-              <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '300px' }} >
-                <Input placeholder='Search our store'
-                  id="standard-adornment-weight"
-                  endAdornment={<InputAdornment position="end"><SearchIcon onClick={props.onClick} /></InputAdornment>}
-                  aria-describedby="standard-weight-helper-text"
-                  inputProps={{
-                    'aria-label': 'weight',
-                    type: 'search'
-                  }}
-                  style={{ fontFamily: 'eczar' }}
-                  onChange={props.onChange}
-                  onKeyDown={props.onKeyDown}
-                />
-                <div>
-                  <h4>Popular searches</h4>
-                  <ul style={{ marginTop: 0, paddingLeft: 0 }}>
-                    <p className='brands'>Jordan</p>
-                    <p className='brands'>Nike</p>
-                    <p className='brands'>Yeezy</p>
-                    <p className='brands'>Adidas</p>
-                    <p className='brands'>New Balance</p>
-                  </ul>
-                </div>
-              </FormControl>
-            </Container>
-          </Box>
-        </Drawer> */}
-        <Drawer
-        {...this}
-          anchor='right'
-          open={this.state.isOpen}
-          onClose={this.closeModal}
-        >
-          <Box style={{ width: '390px' }}>
-            <span style={styles.xIcon}>
-              <CloseIcon onClick={this.closeModal} className='xIcon' />
-            </span>
-
-            <Container style={{ marginLeft: '1rem', justifyContent: 'center' }}>
-              <FormControl variant="standard" sx={{ m: 1, mt: 2, width: '300px' }} >
-                <Input placeholder='Search our store'
-                  id="standard-adornment-weight"
-                  endAdornment={<InputAdornment position="end"><SearchIcon onClick={this.filterProducts} /></InputAdornment>}
-                  aria-describedby="standard-weight-helper-text"
-                  inputProps={{
-                    'aria-label': 'weight',
-                    type: 'search'
-                  }}
-                  style={{ fontFamily: 'eczar' }}
-                  onChange={this.onSearchInputChange}
-                  onKeyDown={this.filterProducts}
-                />
-                <div style={{ lineHeight: '1rem' }}>
-                  <h4>Popular searches</h4>
-                  <div style={{ marginTop: 0, paddingLeft: 0, display: 'flex' }}>
-                    <p className='brands'>Jordan Nike Yeezy New Balance</p>
-                  </div>
-                </div>
-
-              </FormControl>
-            </Container>
-            <Grid style={{ marginTop: 0, marginLeft: '2rem' }}>
-              <ImageList style={{ marginTop: 0, width: '335px' }} >
-                {productList.map(item => (
-                  <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black', width: '150px' }} key={item.productId} >
-                    <ImageListItem style={{ width: '150px' }}>
-                      <img style={{ width: '150px', height: '150px' }}
-                      src={item.imageUrl}
-                      srcSet={item.imageUrl}
-                      alt={item.title}
-                    />
-                      {/* <ImageListItemBar style={{ fontFamily: 'eczar' }}
-                          title={item.name}
-                          position="below"
-                        /> */}
-                    </ImageListItem>
-                  </a>
-                ))}
-              </ImageList>
-            </Grid>
-
-          </Box>
-        </Drawer>
+        {this.searchModal()}
       </>
     );
   }
-}
-// sx = {{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important', width: 300 }}
-function Breadcrumb() {
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="inherit" href="#home" style={styles.font}>
-      Home
-    </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="text.primary"
-      href="#products"
-      style={styles.font}
-    >
-      Products
-    </Link>
-  ];
-
-  return (
-    <Stack spacing={2} style={{ marginTop: '0.4rem' }}>
-      <Breadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
-        aria-label="breadcrumb"
-      >
-        {breadcrumbs}
-      </Breadcrumbs>
-    </Stack>
-  );
 }
