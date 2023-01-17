@@ -163,11 +163,11 @@ export default class ProductDetails extends React.Component {
         <Paper style={styles.paperContainer}>
           <NavBar qty={shoe.length} />
         </Paper>
-        <Container maxWidth='md' style={{ marginTop: '1rem' }}>
+        <Container maxWidth='md' style={{ marginTop: '1.5rem' }}>
           <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
             <CustomSeparator />
           </Grid>
-          <Grid container columns={{ xs: 4, sm: 8, md: 11 }}>
+          <Grid container columns={{ xs: 4, sm: 8, md: 11 }} style={{ marginTop: '1rem' }}>
             <Grid item xs={5} >
               <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
                   src={product.imageUrl}

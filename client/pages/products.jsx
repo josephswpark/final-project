@@ -11,6 +11,15 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import TuneIcon from '@mui/icons-material/Tune';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CloseIcon from '@mui/icons-material/Close';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const styles = {
   paperContainer: {
@@ -43,6 +52,14 @@ const styles = {
     marginTop: '0.5rem',
     marginRight: '0.5rem',
     cursor: 'pointer'
+  },
+  summaryPaper: {
+    p: 2,
+    marginTop: '1rem',
+    maxWidth: 390,
+    flexGrow: 1,
+    backgroundColor: theme =>
+      theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
   }
 };
 
@@ -83,6 +100,9 @@ export default class Products extends React.Component {
       searchInput: '',
       isOpen: false
     };
+    this.filterModal = this.filterModal.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -104,6 +124,69 @@ export default class Products extends React.Component {
     }
   }
 
+  openModal() {
+    this.setState({ isOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isOpen: false });
+  }
+
+  filterModal() {
+    return (
+      <>
+        <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal}/>
+        <Drawer
+        {...this}
+        anchor='right'
+        // open={this.state.isOpen}
+        open
+        onClose={this.closeModal}
+        PaperProps={{ style: { height: '100%', top: 301 } }}
+      >
+          <Box style={{ width: '310px' }}>
+            <span style={styles.xIcon}>
+              <CloseIcon onClick={this.closeModal} className='xIcon' />
+            </span>
+            <div>
+              <Accordion style={{ width: '250px', marginTop: '1rem', marginLeft: '1.5rem' }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography style={{ fontFamily: 'eczar' }}>Sort by</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                    malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+              <Accordion style={{ width: '250px', marginTop: '0.5rem', marginLeft: '1.5rem' }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel2a-content"
+                  id="panel2a-header"
+                >
+                  <Typography style={{ fontFamily: 'eczar' }}>Brand type</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                    malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          </Box>
+        </Drawer>
+
+      </>
+    );
+  }
+
   render() {
     const unfillteredList = this.state.products;
     const shoe = this.state.cartItems;
@@ -113,26 +196,30 @@ export default class Products extends React.Component {
           <NavBar qty={shoe.length} />
           <h1 style={styles.shopAll}>Shop All Sneakers</h1>
         </Paper>
+
         <Container maxWidth='lg'>
           <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
             <Breadcrumb />
+            {this.filterModal()}
           </Grid>
-          <ImageList style={{ gap: 11, marginTop: 0 }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
-            {unfillteredList.map(item => (
-              <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                <ImageListItem style={{ alignItems: 'center' }}>
-                  <img style={{ cursor: 'pointer', width: '300px' }}
+          <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
+            {unfillteredList.map((item, index) => (
+              <Paper key={index} elevation={3}>
+                <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                  <ImageListItem style={{ alignItems: 'center' }}>
+                    <img style={{ cursor: 'pointer', width: '250px' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
                 />
-                  <ImageListItemBar style={styles.productStyle}
+                    <ImageListItemBar style={styles.productStyle}
                   title={item.name}
                   subtitle={<h3>${item.price}</h3>}
                   position="below"
                 />
-                </ImageListItem>
-              </a>
+                  </ImageListItem>
+                </a>
+              </Paper>
             ))}
           </ImageList>
         </Container>

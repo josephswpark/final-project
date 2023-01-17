@@ -105,7 +105,7 @@ export default class NavBar extends React.Component {
             <CloseIcon onClick={this.closeModal} className='xIcon' />
           </span>
           <Container style={{ marginLeft: '1rem', justifyContent: 'center' }}>
-            <FormControl variant="standard" sx={{ m: 1, mt: 2, width: '300px' }} >
+            <FormControl variant="standard" sx={{ m: 1, mt: 3, width: '300px' }} >
               <Input placeholder='Search our store'
                 id="standard-adornment-weight"
                 endAdornment={<InputAdornment position="end"><SearchIcon onClick={this.filterProducts} style={{ cursor: 'pointer' }} /></InputAdornment>}
