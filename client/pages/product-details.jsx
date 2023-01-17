@@ -84,6 +84,14 @@ export default class ProductDetails extends React.Component {
     }
   }
 
+  openModal() {
+    this.setState({ isOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isOpen: false });
+  }
+
   handleChange(event) {
     const { value } = event.target;
     this.setState({ size: Number(value) });
@@ -132,14 +140,6 @@ export default class ProductDetails extends React.Component {
     }
   }
 
-  openModal() {
-    this.setState({ isOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ isOpen: false });
-  }
-
   sizes() {
     const sizes = this.state.product.sizes;
     const sizeInputs = sizes.map(size => {
@@ -161,7 +161,7 @@ export default class ProductDetails extends React.Component {
     return (
       <>
         <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} open={this.openModal}/>
+          <NavBar qty={shoe.length} />
         </Paper>
         <Container maxWidth='md' style={{ marginTop: '1rem' }}>
           <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
@@ -209,8 +209,7 @@ export default class ProductDetails extends React.Component {
         <CartModal qty={this.state.quantity} productinfo={this.state.product}
         size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
       </>
-    )
-    ;
+    );
   }
 }
 
