@@ -1,7 +1,6 @@
 import React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Container from '@mui/material/Container';
 import Image from '../../server/public/shop-img.jpeg';
 import Paper from '@mui/material/Paper';
@@ -13,13 +12,13 @@ import Stack from '@mui/material/Stack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import TuneIcon from '@mui/icons-material/Tune';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
+import Popover from '@mui/material/Popover';
+// import Accordion from '@mui/material/Accordion';
+// import AccordionSummary from '@mui/material/AccordionSummary';
+// import AccordionDetails from '@mui/material/AccordionDetails';
+// import Typography from '@mui/material/Typography';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const styles = {
   paperContainer: {
@@ -40,7 +39,11 @@ const styles = {
     fontFamily: 'eczar',
     width: '100%',
     cursor: 'pointer',
-    textAlign: 'center'
+    textAlign: 'center',
+    flexWrap: 'wrap',
+    height: '100%',
+    padding: '0 1rem',
+    lineHeight: '1.2rem'
   },
   font: {
     fontFamily: 'eczar',
@@ -136,20 +139,28 @@ export default class Products extends React.Component {
     return (
       <>
         <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal}/>
-        <Drawer
+        <Popover
         {...this}
         anchor='right'
-        // open={this.state.isOpen}
-        open
+        open={this.state.isOpen}
+        // open
         onClose={this.closeModal}
-        PaperProps={{ style: { height: '100%', top: 301 } }}
+        PaperProps={{ style: { height: '50%' } }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
       >
-          <Box style={{ width: '310px' }}>
+          <Box style={{ width: '390px' }}>
             <span style={styles.xIcon}>
               <CloseIcon onClick={this.closeModal} className='xIcon' />
             </span>
-            <div>
-              <Accordion style={{ width: '250px', marginTop: '1rem', marginLeft: '1.5rem' }}>
+            <Container style={{ justifyContent: 'center' }}>
+              {/* <Accordion style={{ width: '250px' }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -164,7 +175,7 @@ export default class Products extends React.Component {
                   </Typography>
                 </AccordionDetails>
               </Accordion>
-              <Accordion style={{ width: '250px', marginTop: '0.5rem', marginLeft: '1.5rem' }}>
+              <Accordion style={{ width: '250px' }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel2a-content"
@@ -178,11 +189,10 @@ export default class Products extends React.Component {
                     malesuada lacus ex, sit amet blandit leo lobortis eget.
                   </Typography>
                 </AccordionDetails>
-              </Accordion>
-            </div>
+              </Accordion> */}
+            </Container>
           </Box>
-        </Drawer>
-
+        </Popover>
       </>
     );
   }
@@ -202,7 +212,7 @@ export default class Products extends React.Component {
             <Breadcrumb />
             {this.filterModal()}
           </Grid>
-          <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))!important' }} >
+          <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
             {unfillteredList.map((item, index) => (
               <Paper key={index} elevation={3}>
                 <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
@@ -212,11 +222,10 @@ export default class Products extends React.Component {
                   srcSet={item.imageUrl}
                   alt={item.title}
                 />
-                    <ImageListItemBar style={styles.productStyle}
-                  title={item.name}
-                  subtitle={<h3>${item.price}</h3>}
-                  position="below"
-                />
+                    <div style={styles.productStyle}>
+                      <p style={{ marginTop: 0 }}>{item.name} </p>
+                      <p style={{ marginTop: 0, fontWeight: 'bold' }}>${item.price}</p>
+                    </div>
                   </ImageListItem>
                 </a>
               </Paper>
