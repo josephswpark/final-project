@@ -1,17 +1,13 @@
 # Sneaker World
 
-A full stack 
-## :thinking: Why I built this
+A full-stack web application for sneakers to purchase rare sneakers.
 
-While attending LearningFuze's Accelerated Full Immersion Web Development Bootcamp I found myself using
-apps like Brainscapes and Quizlet to study the information I was learning. I wanted to create a flash card
-app for myself and future students to use and study with. I also wanted to create something that felt more
-immersive with a classroom/supplies theme and CSS animations. The buddy and instructor cats in the app are based on my
-two cats, Bacchus and Apollo!
+## Why I built this :thinking: 
 
-### 🔗 Live Demo
 
-Try the application live here: https://study-buddy.brandonmoy.com/
+### Live Demo 🔗
+
+Try the application live here: https://sneaker-world.josephswpark.dev
 
 ## 💻 Technologies Used
 
@@ -31,6 +27,7 @@ Try the application live here: https://study-buddy.brandonmoy.com/
 - Argon2
 - JSON Web Token
 - Dotenv
+- Material UI
 
 ## :open_book: Features
 - Users can create a folder for flashcards
