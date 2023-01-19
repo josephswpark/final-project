@@ -3,7 +3,7 @@
 A full-stack web application for sneakers to purchase rare sneakers.
 
 ## Why I built this :thinking: 
-
+Growing up, I always loved sneakers except I wasn't able to afford any of it, which made my desire to collect sneakers grew. As I collected my personal sneakers, I also started reselling limited and rare sneakers. As I used applications such as OfferUp and Facebook Marketplace, I wanted to create an E-Commerce website so that I can directly sell my sneaker inventory to consumers. 
 
 ### Live Demo 🔗
 
@@ -12,24 +12,23 @@ Try the application live here: https://sneaker-world.josephswpark.dev
 ## 💻 Technologies Used
 
 ### Languages
-- HTML5
-- CSS3
-- JavaScript (ES6)
-- SQL
-- React (Framework)
-- JSX
-
+* HTML5
+* CSS3
+* JavaScript (ES6)
+* SQL
+* React (Framework)
+* JSX
 ### Packages
-- Node.js
-- Express.js
-- Babel
-- Webpack
-- Argon2
-- JSON Web Token
-- Dotenv
-- Material UI
+* Node.js
+* Express.js
+* Babel
+* Webpack
+* Argon2
+* JSON Web Token
+* Dotenv
+* Material UI
 
-## :open_book: Features
+## Features :open_book:
 * Users can view all shoes
 * Users can search for a product
 * Users can filter the products by brand, price & sort Alphabetically
@@ -39,16 +38,17 @@ Try the application live here: https://sneaker-world.josephswpark.dev
 * Users can delete an item(s) from the cart
 * Users can place an order with the items in their cart
 
-## :books: Stretch Features
+## Stretch Features :books:
 * Users can sign up for an account
 * Users can sign in to their account
 * Users can sign out of their account
 * Users can view their Order History
 
-## :eyes: Preview
+## Preview :eyes:
+![Kapture 2023-01-18 at 16 24 19](https://user-images.githubusercontent.com/113474457/213326900-500220c4-62ae-4045-a6d0-573b4f260bb7.gif)
 
-## :notebook: Features in Development
-- Users can sign up for an account
+## Features in Development :notebook:
+* Users can sign up for an account
 
 ## :man_technologist: Development
 
