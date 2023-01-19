@@ -30,37 +30,25 @@ Try the application live here: https://sneaker-world.josephswpark.dev
 - Material UI
 
 ## :open_book: Features
-- Users can create a folder for flashcards
-- Users can add flashcards to the folder
-- Users can view flashcards in a folder
-- Users can edit a flashcard
-- Users can delete a flashcard
-- Users can delete an entire folder of flashcards
-- Users can study a folder of flashcards
-- Users can rate their confidence of their flashcards (while studying)
-- Users can see their confidence average for a folder
-- Users can reset their confidence for a folder (resets all flashcards in the folder)
+* Users can view all shoes
+* Users can search for a product
+* Users can filter the products by brand, price & sort Alphabetically
+* Users can click a product to view its details
+* Users can add multiple shoes to their cart
+* Users can view the current cart
+* Users can delete an item(s) from the cart
+* Users can place an order with the items in their cart
 
 ## :books: Stretch Features
-- Users can sign up for an account
-- Users can sign in to their account
-- Users can sign out of their account
-- Users can choose a study order for their flashcards (standard, shuffle, of by confidence)
-- Users can follow a tour on their first sign in
+* Users can sign up for an account
+* Users can sign in to their account
+* Users can sign out of their account
+* Users can view their Order History
 
 ## :eyes: Preview
 
-### User can create a folder for flashcards / Users can add flashcards to the folder
-![Add Folder & Card](/read-me-gifs/add-deck-card-feature.gif "Creating a folder and adding a flashcard")
-
-### Users study a folder of flashcards
-![Studying flashcards](/read-me-gifs/study-feature.gif "Studying flashcards")
-
-### Users can follow a tour on their first sign in
-![Tour](/read-me-gifs/tour-feature.gif "Touring the StudyBuddy")
-
 ## :notebook: Features in Development
-- Users can retake the tour
+- Users can sign up for an account
 
 ## :man_technologist: Development
 
@@ -68,7 +56,7 @@ Try the application live here: https://sneaker-world.josephswpark.dev
 
 1. Clone the repository
 ```
-git clone https://github.com/brandon-moy/study-buddy.git
+git clone git@github.com:josephswpark/sneaker-world.git
 ```
 2. Install dependencies with Node Package Manager
 ```
