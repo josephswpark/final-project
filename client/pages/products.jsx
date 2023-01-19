@@ -203,9 +203,15 @@ export default class Products extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <RadioGroup aria-label="sort by" name="sort-by" >
-                  <FormControlLabel style={{ border: 'none' }} value="A-Z" control={<Radio />} label="Alphabetically, A-Z" onClick={this.filterProducts} />
-                  <FormControlLabel style={{ border: 'none' }} value="low to high" control={<Radio />} label="Price, low to high" onClick={this.filterProducts} />
-                  <FormControlLabel style={{ border: 'none' }} value="high to low" control={<Radio />} label="Price, high to low" onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="A-Z" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Alphabetically, A-Z</Typography>}
+                  onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="low to high" control={<Radio />}
+                    label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Price, Low to High</Typography>}
+                  onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="high to low" control={<Radio />}
+                    label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Price, High to Low</Typography>}
+                  onClick={this.filterProducts} />
                 </RadioGroup>
               </AccordionDetails>
             </Accordion>
@@ -219,11 +225,15 @@ export default class Products extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <RadioGroup aria-label="brand" name="brand" >
-                  <FormControlLabel style={{ border: 'none', fontFamily: 'eczar' }}
-                  value="Nike" control={<Radio />} label="Nike" onClick={this.filterProducts}/>
-                  <FormControlLabel style={{ border: 'none' }} value="Yeezy" control={<Radio />} label="Yeezy" onClick={this.filterProducts} />
-                  <FormControlLabel style={{ border: 'none' }} value="New Balance" control={<Radio />} label="New Balance" onClick={this.filterProducts} />
-                  <FormControlLabel style={{ border: 'none' }} value="Jordan" control={<Radio />} label="Jordan" onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none', fontFamily: 'eczar' }} value="Nike" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Nike</Typography>} onClick={this.filterProducts}/>
+                  <FormControlLabel style={{ border: 'none' }} value="Yeezy" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Yeezy</Typography>} onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="New Balance" control={<Radio />}
+                    label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>New Balance</Typography>}
+                  onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="Jordan" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Jordan</Typography>} onClick={this.filterProducts} />
                 </RadioGroup>
               </AccordionDetails>
             </Accordion>
