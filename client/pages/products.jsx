@@ -13,12 +13,15 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import TuneIcon from '@mui/icons-material/Tune';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
-// import Accordion from '@mui/material/Accordion';
-// import AccordionSummary from '@mui/material/AccordionSummary';
-// import AccordionDetails from '@mui/material/AccordionDetails';
-// import Typography from '@mui/material/Typography';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const styles = {
   paperContainer: {
@@ -100,18 +103,19 @@ export default class Products extends React.Component {
     this.state = {
       products: [],
       cartItems: [],
-      searchInput: '',
+      filteredProductsList: [],
       isOpen: false
     };
     this.filterModal = this.filterModal.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.filterProducts = this.filterProducts.bind(this);
   }
 
   componentDidMount() {
     fetch('/api/shoes')
       .then(res => res.json())
-      .then(products => this.setState({ products }))
+      .then(products => this.setState({ products, filteredProductsList: products }))
       .catch(err => console.error(err));
     const token = window.localStorage.getItem('token');
     if (token) {
@@ -135,17 +139,44 @@ export default class Products extends React.Component {
     this.setState({ isOpen: false });
   }
 
+  filterProducts(event) {
+    if (event.target.value === 'Nike' || event.target.value === 'Yeezy' || event.target.value === 'New Balance' || event.target.value === 'Jordan') {
+      const filteredArr = this.state.products.filter(product => product.brand.includes(event.target.value));
+      this.setState({ filteredProductsList: filteredArr });
+      this.closeModal();
+      if (event.target.value === 'reset') {
+        this.setState({ filteredProductsList: this.state.products });
+      }
+    }
+    if (event.target.value === 'A-Z') {
+      const alphabet = this.state.products.sort(function (a, b) { return a.name.localeCompare(b.name); }).filter(product => product);
+      this.setState({ filteredProductsList: alphabet });
+      this.closeModal();
+    }
+    if (event.target.value === 'high to low') {
+      const priceHighToLow = this.state.products.sort(function (a, b) { return b.price - a.price; });
+      this.setState({ filteredProductsList: priceHighToLow });
+      this.closeModal();
+    }
+    if (event.target.value === 'low to high') {
+      const priceHighToLow = this.state.products.sort(function (a, b) { return a.price - b.price; });
+      this.setState({ filteredProductsList: priceHighToLow });
+      this.closeModal();
+    }
+    if (event.target.classList.contains('reset')) {
+      this.setState({ filteredProductsList: this.state.products });
+      this.closeModal();
+    }
+  }
+
   filterModal() {
     return (
-      <>
-        <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal}/>
-        <Popover
+      <Popover
         {...this}
         anchor='right'
         open={this.state.isOpen}
-        // open
         onClose={this.closeModal}
-        PaperProps={{ style: { height: '50%' } }}
+        PaperProps={{ style: { height: '50%', backgroundColor: '#223644' } }}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right'
@@ -155,50 +186,66 @@ export default class Products extends React.Component {
           horizontal: 'right'
         }}
       >
-          <Box style={{ width: '390px' }}>
-            <span style={styles.xIcon}>
-              <CloseIcon onClick={this.closeModal} className='xIcon' />
-            </span>
-            <Container style={{ justifyContent: 'center' }}>
-              {/* <Accordion style={{ width: '250px' }}>
-                <AccordionSummary
+        <Box style={{ width: '360px' }}>
+          <span style={styles.xIcon}>
+            <CloseIcon onClick={this.closeModal} className='xIcon' style={{ color: 'white' }}/>
+          </span>
+          <p style={{ marginLeft: '2rem', color: 'white', marginBottom: '0.5rem' }}>Filters</p>
+          <Grid container style={{ justifyContent: 'center' }}>
+            <Accordion style={{ width: '300px', marginBottom: '0.5rem' }}>
+              <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
+                  style={{ margin: 0 }}
                 >
-                  <Typography style={{ fontFamily: 'eczar' }}>Sort by</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                  </Typography>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion style={{ width: '250px' }}>
-                <AccordionSummary
+                <Typography style={{ fontFamily: 'eczar' }}>Sort by</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <RadioGroup aria-label="sort by" name="sort-by" >
+                  <FormControlLabel style={{ border: 'none' }} value="A-Z" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Alphabetically, A-Z</Typography>}
+                  onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="low to high" control={<Radio />}
+                    label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Price, Low to High</Typography>}
+                  onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="high to low" control={<Radio />}
+                    label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Price, High to Low</Typography>}
+                  onClick={this.filterProducts} />
+                </RadioGroup>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion style={{ width: '300px', marginBottom: '0.5rem' }}>
+              <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel2a-content"
                   id="panel2a-header"
                 >
-                  <Typography style={{ fontFamily: 'eczar' }}>Brand type</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                  </Typography>
-                </AccordionDetails>
-              </Accordion> */}
-            </Container>
-          </Box>
-        </Popover>
-      </>
+                <Typography style={{ fontFamily: 'eczar' }}>Brand type</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <RadioGroup aria-label="brand" name="brand" >
+                  <FormControlLabel style={{ border: 'none', fontFamily: 'eczar' }} value="Nike" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Nike</Typography>} onClick={this.filterProducts}/>
+                  <FormControlLabel style={{ border: 'none' }} value="Yeezy" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Yeezy</Typography>} onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="New Balance" control={<Radio />}
+                    label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>New Balance</Typography>}
+                  onClick={this.filterProducts} />
+                  <FormControlLabel style={{ border: 'none' }} value="Jordan" control={<Radio />}
+                  label={<Typography variant='subtitle1' style={{ fontFamily: 'eczar' }}>Jordan</Typography>} onClick={this.filterProducts} />
+                </RadioGroup>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+          <a className='reset' style={{ color: 'white', marginLeft: '2rem', cursor: 'pointer', textDecoration: 'underline' }} onClick={this.filterProducts}>Reset</a>
+        </Box>
+      </Popover>
     );
   }
 
   render() {
-    const unfillteredList = this.state.products;
+    const unfillteredList = this.state.filteredProductsList;
     const shoe = this.state.cartItems;
     return (
       <>
@@ -210,7 +257,8 @@ export default class Products extends React.Component {
         <Container maxWidth='lg'>
           <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
             <Breadcrumb />
-            {this.filterModal()}
+            <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal} />
+
           </Grid>
           <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
             {unfillteredList.map((item, index) => (
@@ -232,6 +280,7 @@ export default class Products extends React.Component {
             ))}
           </ImageList>
         </Container>
+        {this.filterModal()}
       </>
     );
   }
