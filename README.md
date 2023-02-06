@@ -3,7 +3,7 @@
 A full-stack web application for sneakers to purchase rare sneakers.
 
 ## Why I built this :thinking: 
-Growing up, I always loved sneakers except I wasn't able to afford any of it, which made my desire to collect sneakers grew. As I collected my personal sneakers, I also started reselling limited and rare sneakers. As I used applications such as OfferUp and Facebook Marketplace, I wanted to create an E-Commerce website so that I can directly sell my sneaker inventory to consumers. 
+Growing up, I was always a fan of sneakers, but due to financial constraints, I was unable to purchase many. This fueled my desire to collect sneakers, and I eventually started reselling limited and rare sneakers through platforms such as OfferUp and Facebook Marketplace. However, I had a vision of creating my own E-Commerce website to sell my sneaker inventory directly to consumers, and make my passion for sneakers a source of income.
 
 ### Live Demo 🔗
 
