@@ -182,7 +182,7 @@ class Checkout extends React.Component {
       <Grid item style={{ padding: 0, maxWidth: '550px' }}>
         {shoe.map((item, index) => (
           <ImageList style={{ marginTop: 0, marginBottom: 0 }} key={index}>
-            <img alt="complex" src={item.imageUrl} style={{ width: '125px', height: '125px' }} />
+            <img alt="complex" src={item.imageUrl} style={{ width: '125px', height: '125px' }} loading="lazy" />
             <Grid item xs={12} container>
               <Grid item container direction="column" spacing={2} >
                 <Grid item xs style={{ paddingTop: '1.6rem', paddingLeft: 0 }}>

@@ -269,6 +269,7 @@ export default class Products extends React.Component {
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
+                      loading="lazy"
                 />
                     <div style={styles.productStyle}>
                       <p style={{ marginTop: 0 }}>{item.name} </p>

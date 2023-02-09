@@ -289,7 +289,7 @@ export default class Cart extends React.Component {
                     <Paper style={styles.cartPaper} key={index}>
                       <ImageList style={{ marginTop: '1rem', marginLeft: '0.5rem' }}>
                         <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                          <img alt="complex" src={item.imageUrl} style={{ width: '240px', height: '240px' }}/>
+                          <img alt="complex" src={item.imageUrl} style={{ width: '240px', height: '240px' }} loading="lazy" />
                         </a>
                         <Grid item xs={12} container>
                           <Grid item container direction="column" spacing={2} >
