@@ -104,7 +104,8 @@ export default class Products extends React.Component {
       products: [],
       cartItems: [],
       filteredProductsList: [],
-      isOpen: false
+      isOpen: false,
+      loading: true
     };
     this.filterModal = this.filterModal.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -116,7 +117,8 @@ export default class Products extends React.Component {
     fetch('/api/shoes')
       .then(res => res.json())
       .then(products => this.setState({ products, filteredProductsList: products }))
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => this.setState({ loading: false }));
     const token = window.localStorage.getItem('token');
     if (token) {
       fetch('/api/cart', {
@@ -247,42 +249,65 @@ export default class Products extends React.Component {
   render() {
     const unfillteredList = this.state.filteredProductsList;
     const shoe = this.state.cartItems;
-    return (
-      <>
-        <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} />
-          <h1 style={styles.shopAll}>Shop All Sneakers</h1>
-        </Paper>
+    if (this.state.loading) {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+            <h1 style={styles.shopAll}>Shop All Sneakers</h1>
+          </Paper>
+          {/* <Container maxWidth='lg' > */}
+          <div className="dot-spinner">
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+            <div className="dot-spinner__dot" />
+          </div>
+          {/* </Container> */}
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+            <h1 style={styles.shopAll}>Shop All Sneakers</h1>
+          </Paper>
 
-        <Container maxWidth='lg'>
-          <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
-            <Breadcrumb />
-            <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal} />
+          <Container maxWidth='lg'>
+            <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
+              <Breadcrumb />
+              <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal} />
 
-          </Grid>
-          <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
-            {unfillteredList.map((item, index) => (
-              <Paper key={index} elevation={3}>
-                <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                  <ImageListItem style={{ alignItems: 'center' }}>
-                    <img style={{ cursor: 'pointer', width: '250px' }}
+            </Grid>
+            <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
+              {unfillteredList.map((item, index) => (
+                <Paper key={index} elevation={3}>
+                  <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                    <ImageListItem style={{ alignItems: 'center' }}>
+                      <img style={{ cursor: 'pointer', width: '250px' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
                       loading="lazy"
                 />
-                    <div style={styles.productStyle}>
-                      <p style={{ marginTop: 0 }}>{item.name} </p>
-                      <p style={{ marginTop: 0, fontWeight: 'bold' }}>${item.price}</p>
-                    </div>
-                  </ImageListItem>
-                </a>
-              </Paper>
-            ))}
-          </ImageList>
-        </Container>
-        {this.filterModal()}
-      </>
-    );
+                      <div style={styles.productStyle}>
+                        <p style={{ marginTop: 0 }}>{item.name} </p>
+                        <p style={{ marginTop: 0, fontWeight: 'bold' }}>${item.price}</p>
+                      </div>
+                    </ImageListItem>
+                  </a>
+                </Paper>
+              ))}
+            </ImageList>
+          </Container>
+          {this.filterModal()}
+        </>
+      );
+    }
   }
 }
