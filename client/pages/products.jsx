@@ -22,6 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Footer from '../components/footer';
 
 const styles = {
   paperContainer: {
@@ -42,11 +43,11 @@ const styles = {
     fontFamily: 'eczar',
     width: '100%',
     cursor: 'pointer',
-    textAlign: 'center',
+    textAlign: 'left',
     flexWrap: 'wrap',
     height: '100%',
-    padding: '0 1rem',
-    lineHeight: '1.2rem'
+    padding: '0 2.5rem',
+    lineHeight: '1.1rem'
   },
   font: {
     fontFamily: 'eczar',
@@ -254,33 +255,31 @@ export default class Products extends React.Component {
           <h1 style={styles.shopAll}>Shop All Sneakers</h1>
         </Paper>
 
-        <Container maxWidth='lg'>
+        <Container maxWidth='lg' style={{ minHeight: '100vh', marginBottom: '2.5rem' }} >
           <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
             <Breadcrumb />
             <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal} />
-
           </Grid>
           <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
             {unfillteredList.map((item, index) => (
-              <Paper key={index} elevation={3}>
-                <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                  <ImageListItem style={{ alignItems: 'center' }}>
-                    <img style={{ cursor: 'pointer', width: '250px' }}
+              <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                <ImageListItem style={{ alignItems: 'center' }}>
+                  <img style={{ cursor: 'pointer', width: '100%', borderRadius: '2rem' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
                       loading="lazy"
                 />
-                    <div style={styles.productStyle}>
-                      <p style={{ marginTop: 0 }}>{item.name} </p>
-                      <p style={{ marginTop: 0, fontWeight: 'bold' }}>${item.price}</p>
-                    </div>
-                  </ImageListItem>
-                </a>
-              </Paper>
+                  <div style={styles.productStyle}>
+                    <p style={{ marginTop: 0, fontWeight: 500 }}>{item.name} </p>
+                    <p style={{ marginTop: 0 }}>${item.price} USD</p>
+                  </div>
+                </ImageListItem>
+              </a>
             ))}
           </ImageList>
         </Container>
+        <Footer/>
         {this.filterModal()}
       </>
     );

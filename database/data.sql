@@ -15,7 +15,7 @@ values ('1', 'DZ5485-612', 'Jordan 1 Retro High OG Lost and Found', '500', 'http
   ('14', 'HQ6448', 'Yeezy Slide Onyx', '245', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-slide-onyx-31835802_2048x2048.jpg?v=1671054714', 'Yeezy'),
   ('15', 'AQ4832', 'Yeezy 350 Turtledove', '450', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-350-turtledove-2022-31835742_2048x2048.jpg?v=1671054525', 'Yeezy'),
   ('16', 'GV7903', 'Yeezy Foam RNNR Mineral Blue', '300', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/yeezy-foam-rnnr-mineral-blue-31835784_2048x2048.jpg?v=1671054657', 'Yeezy'),
-  ('17', 'BB550ALD', 'New Balance 550 Aime Leon Dore White Green', '425', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/new-balance-550-aime-leon-dore-white-green-31834236_2048x2048.png?v=1671048126', 'New Balance'),
+  ('17', 'DB5551-900', 'Nike Kobe 5 Protro What If Pack', '900', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/nike-kobe-5-protro-undefeated-what-if-pack-31834598_2048x2048.jpg?v=1678943902', 'Nike'),
   ('18', 'BB550LWT', 'New Balance 550 Cream Black', '220', 'https://cdn.shopify.com/s/files/1/0366/7253/6715/products/new-balance-550-cream-black-31834240_2048x2048.jpg?v=1671048139', 'New Balance');
 
 

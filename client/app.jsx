@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 import Cart from '../client/pages/cart';
 import Checkout from './pages/checkout';
 import Confirmation from './pages/confirmation';
+import ErrorPage from './pages/error';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -59,6 +60,9 @@ export default class App extends React.Component {
     }
     if (path === 'confirmation') {
       return <Confirmation />;
+    }
+    if (path === 'error') {
+      return <ErrorPage/>;
     }
   }
 
