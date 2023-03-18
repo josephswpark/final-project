@@ -23,6 +23,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Footer from '../components/footer';
+import Loading from '../components/spinner';
 
 const styles = {
   paperContainer: {
@@ -105,7 +106,8 @@ export default class Products extends React.Component {
       products: [],
       cartItems: [],
       filteredProductsList: [],
-      isOpen: false
+      isOpen: false,
+      loading: true
     };
     this.filterModal = this.filterModal.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -117,7 +119,8 @@ export default class Products extends React.Component {
     fetch('/api/shoes')
       .then(res => res.json())
       .then(products => this.setState({ products, filteredProductsList: products }))
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => this.setState({ loading: false }));
     const token = window.localStorage.getItem('token');
     if (token) {
       fetch('/api/cart', {
@@ -248,40 +251,51 @@ export default class Products extends React.Component {
   render() {
     const unfillteredList = this.state.filteredProductsList;
     const shoe = this.state.cartItems;
-    return (
-      <>
-        <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} />
-          <h1 style={styles.shopAll}>Shop All Sneakers</h1>
-        </Paper>
-
-        <Container maxWidth='lg' style={{ minHeight: '100vh', marginBottom: '2.5rem' }} >
-          <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
-            <Breadcrumb />
-            <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal} />
-          </Grid>
-          <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
-            {unfillteredList.map((item, index) => (
-              <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
-                <ImageListItem style={{ alignItems: 'center' }}>
-                  <img style={{ cursor: 'pointer', width: '100%', borderRadius: '2rem' }}
+    if (this.state.loading) {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+            <h1 style={styles.shopAll}>Shop All Sneakers</h1>
+          </Paper>
+          <Loading />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+            <h1 style={styles.shopAll}>Shop All Sneakers</h1>
+          </Paper>
+          <Container maxWidth='lg' style={{ minHeight: '100vh', marginBottom: '2.5rem' }} >
+            <Grid item xs={12} style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
+              <Breadcrumb />
+              <TuneIcon style={{ cursor: 'pointer' }} onClick={this.openModal} />
+            </Grid>
+            <ImageList style={{ gap: 11, marginTop: '1rem' }} sx={{ gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))!important' }} >
+              {unfillteredList.map((item, index) => (
+                <a href={`#product?product=${item.productId}`} style={{ textDecoration: 'none', color: 'black' }} key={item.productId} >
+                  <ImageListItem style={{ alignItems: 'center' }}>
+                    <img style={{ cursor: 'pointer', width: '100%', borderRadius: '2rem' }}
                   src={item.imageUrl}
                   srcSet={item.imageUrl}
                   alt={item.title}
                       loading="lazy"
                 />
-                  <div style={styles.productStyle}>
-                    <p style={{ marginTop: 0, fontWeight: 500 }}>{item.name} </p>
-                    <p style={{ marginTop: 0 }}>${item.price} USD</p>
-                  </div>
-                </ImageListItem>
-              </a>
-            ))}
-          </ImageList>
-        </Container>
-        <Footer/>
-        {this.filterModal()}
-      </>
-    );
+                    <div style={styles.productStyle}>
+                      <p style={{ marginTop: 0, fontWeight: 500 }}>{item.name} </p>
+                      <p style={{ marginTop: 0 }}>${item.price} USD</p>
+                    </div>
+                  </ImageListItem>
+                </a>
+              ))}
+            </ImageList>
+          </Container>
+          <Footer/>
+          {this.filterModal()}
+        </>
+      );
+    }
   }
 }

@@ -14,6 +14,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Footer from '../components/footer';
+import Loading from '../components/spinner';
 
 const theme = createTheme({
   palette: {
@@ -68,8 +69,9 @@ export default class ProductDetails extends React.Component {
   componentDidMount() {
     fetch(`/api/shoes/${this.props.productId}`)
       .then(res => res.json())
-      .then(product => this.setState({ product, loading: false }))
-      .catch(err => console.error(err));
+      .then(product => this.setState({ product }))
+      .catch(err => console.error(err))
+      .finally(() => this.setState({ loading: false }));
     const token = window.localStorage.getItem('token');
     const tokenStored = token ? jwtDecode(token) : null;
     this.setState({ cart: tokenStored });
@@ -159,60 +161,70 @@ export default class ProductDetails extends React.Component {
   render() {
     const product = this.state.product;
     const shoe = this.state.cartItems;
-    if (this.state.loading) return null;
-    return (
-      <>
-        <Paper style={styles.paperContainer}>
-          <NavBar qty={shoe.length} />
-        </Paper>
-        <Container maxWidth='md' style={{ marginTop: '1.5rem', minHeight: '100vh' }}>
-          <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
-            <CustomSeparator />
-          </Grid>
-          <Grid container columns={{ xs: 4, sm: 8, md: 11 }} style={{ marginTop: '1rem', justifyContent: 'space-evenly' }}>
-            <Grid item xs={5} >
-              <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
+    if (this.state.loading) {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+          </Paper>
+          <Loading />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Paper style={styles.paperContainer}>
+            <NavBar qty={shoe.length} />
+          </Paper>
+          <Container maxWidth='md' style={{ marginTop: '1.5rem', minHeight: '100vh' }}>
+            <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
+              <CustomSeparator />
+            </Grid>
+            <Grid container columns={{ xs: 4, sm: 8, md: 11 }} style={{ marginTop: '1rem', justifyContent: 'space-evenly' }}>
+              <Grid item xs={5} >
+                <Item style={{ padding: 0, justifyContent: 'center' }}><img style={{ width: 388, height: 390 }}
                   src={product.imageUrl}
                   srcSet={product.imageUrl}
                   alt={product.title}
                   loading="lazy"
                 /></Item>
-            </Grid>
-            <form onSubmit={this.addToCart}>
-              <Grid item xs={5} style={{ marginTop: 0, marginLeft: '1rem' }}>
-                <span>
-                  <h3 style={{
-                    fontFamily: 'eczar',
-                    fontWeight: 300,
-                    marginBottom: 0,
-                    width: '345px'
-                  }}>{product.name}</h3>
-                  <h3 style={styles.spacing}>${product.price} USD</h3>
-                  <h3 style={styles.spacing}> Men&apos;s Size</h3>
-                </span>
-                <Stack direction='row'>
-                  {this.sizes()}
-                </Stack>
-                <Button type='submit' theme={theme} color='primary' variant='contained'
-                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }}>
-                  ADD TO CART
-                </Button>
-                <div style={{ marginBottom: '3rem' }}>
-                  <ul style={{ width: '345px' }}>
-                    <li key='sku'><p>SKU: {product.sku}</p></li>
-                    <li key='authentic'><p>100% Authencity Guaranteed</p></li>
-                    <li key='ready'><p>In stock & ready to ship!</p></li>
-                  </ul>
-                </div>
               </Grid>
-            </form>
-          </Grid>
-        </Container>
-        <Footer />
-        <CartModal qty={this.state.quantity} productinfo={this.state.product}
+              <form onSubmit={this.addToCart}>
+                <Grid item xs={5} style={{ marginTop: 0, marginLeft: '1rem' }}>
+                  <span>
+                    <h3 style={{
+                      fontFamily: 'eczar',
+                      fontWeight: 300,
+                      marginBottom: 0,
+                      width: '345px'
+                    }}>{product.name}</h3>
+                    <h3 style={styles.spacing}>${product.price} USD</h3>
+                    <h3 style={styles.spacing}> Men&apos;s Size</h3>
+                  </span>
+                  <Stack direction='row'>
+                    {this.sizes()}
+                  </Stack>
+                  <Button type='submit' theme={theme} color='primary' variant='contained'
+                  style={{ width: '330px', marginTop: '1.5rem', fontFamily: 'ezcar' }}>
+                    ADD TO CART
+                  </Button>
+                  <div style={{ marginBottom: '3rem' }}>
+                    <ul style={{ width: '345px' }}>
+                      <li key='sku'><p>SKU: {product.sku}</p></li>
+                      <li key='authentic'><p>100% Authencity Guaranteed</p></li>
+                      <li key='ready'><p>In stock & ready to ship!</p></li>
+                    </ul>
+                  </div>
+                </Grid>
+              </form>
+            </Grid>
+          </Container>
+          <Footer />
+          <CartModal qty={this.state.quantity} productinfo={this.state.product}
         size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
-      </>
-    );
+        </>
+      );
+    }
   }
 }
 
