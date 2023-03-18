@@ -13,6 +13,7 @@ import jwtDecode from 'jwt-decode';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Footer from '../components/footer';
 
 const theme = createTheme({
   palette: {
@@ -39,7 +40,8 @@ const styles = {
     marginTop: 0,
     height: '22px',
     fontFamily: 'eczar',
-    fontWeight: 300
+    fontWeight: 300,
+    fontSize: '1rem'
   }
 
 };
@@ -163,7 +165,7 @@ export default class ProductDetails extends React.Component {
         <Paper style={styles.paperContainer}>
           <NavBar qty={shoe.length} />
         </Paper>
-        <Container maxWidth='md' style={{ marginTop: '1.5rem' }}>
+        <Container maxWidth='md' style={{ marginTop: '1.5rem', minHeight: '100vh' }}>
           <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
             <CustomSeparator />
           </Grid>
@@ -185,8 +187,8 @@ export default class ProductDetails extends React.Component {
                     marginBottom: 0,
                     width: '345px'
                   }}>{product.name}</h3>
-                  <h3 style={styles.spacing}>${product.price}</h3>
-                  <h3 style={styles.spacing}>size</h3>
+                  <h3 style={styles.spacing}>${product.price} USD</h3>
+                  <h3 style={styles.spacing}> Men&apos;s Size</h3>
                 </span>
                 <Stack direction='row'>
                   {this.sizes()}
@@ -206,6 +208,7 @@ export default class ProductDetails extends React.Component {
             </form>
           </Grid>
         </Container>
+        <Footer />
         <CartModal qty={this.state.quantity} productinfo={this.state.product}
         size={this.state.size} open={this.state.isOpen} onClose={this.closeModal} />
       </>

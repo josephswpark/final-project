@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Button from '@mui/material/Button';
+import Footer from '../components/footer';
 
 const theme = createTheme({
   palette: {
@@ -41,7 +42,7 @@ export default class Confirmation extends React.Component {
         <Paper style={styles.paperContainer}>
           <NavBar style={{ display: 'none' }} />
         </Paper>
-        <Container maxWidth='sm'>
+        <Container maxWidth='sm' style={{ minHeight: '100vh' }}>
           <ThemeProvider theme={theme}>
             <Container>
               <Typography component="h1" variant="h5" align="center" style={{ fontFamily: 'eczar', marginTop: '2.5rem' }}>
@@ -65,6 +66,7 @@ export default class Confirmation extends React.Component {
             </Container>
           </ThemeProvider>
         </Container>
+        <Footer />
       </>
     );
   }

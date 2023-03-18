@@ -27,7 +27,8 @@ label {
 
 label:hover,
 button:hover {
-  background: #ddd;
+  background: black;
+  color: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
 }
 
@@ -47,12 +48,6 @@ li {
 
 h4 {
   height: 15px;
-}
-
-.shop {
-  position: relative;
-  left: 75%;
-  top: 80%;
 }
 
 .cta {
@@ -116,4 +111,87 @@ h4 {
 
 #arrow-horizontal {
   color: white;
+}
+
+.footer-list {
+  list-style: none;
+}
+
+.footer {
+  padding-bottom: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  background: none;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition-duration: 400ms;
+  transition-property: color;
+  color: white;
+}
+
+.sneaker-button {
+  text-decoration: none;
+  color: black;
+}
+
+.footer-logo {
+  font-size: 18px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  background: none;
+  text-transform: uppercase;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition-duration: 400ms;
+  transition-property: color;
+  color: white;
+}
+
+.footer-logo::after,
+.footer::after {
+  content: "";
+  pointer-events: none;
+  top: 1.5rem;
+  left: 50%;
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: white;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition-duration: 400ms;
+  transition-property: width, left;
+}
+
+.footer-logo:focus,
+.footer-logo:hover,
+.footer:focus,
+.footer:hover {
+  color: white;
+}
+
+.footer-logo:focus::after,
+.footer-logo:hover::after,
+.footer:focus::after,
+.footer:hover::after {
+  width: 100%;
+  left: 0%;
+}
+
+a {
+  color: white;
+}
+
+.logo-button:hover {
+  color: white;
+  transform: scale(1.1);
+  outline: 2px solid white;
+  border-radius: 0.5rem;
+  box-shadow: 4px 5px 17px -4px white;
+}
+
+.logo-button:hover::before {
+  width: 250%;
 }

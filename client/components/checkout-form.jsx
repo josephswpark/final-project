@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import Total from '../lib/total';
 import ImageList from '@mui/material/ImageList';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Link from '@mui/material/Link';
 import Cart from '../pages/cart';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -17,6 +16,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { ElementsConsumer, PaymentElement } from '@stripe/react-stripe-js';
+import Footer from '../components/footer';
 
 const steps = ['Shipping Address', 'Payment Information'];
 
@@ -124,18 +124,6 @@ class Checkout extends React.Component {
       .then(res => res.json())
       .then(cart => this.setState({ cartItems: cart }))
       .catch(err => console.error(err));
-  }
-
-  Copyright() {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
-        {'Copyright © '}
-        <Link color="inherit" href="#home">
-          SneakerWorld
-        </Link>{' '}
-        {new Date().getFullYear()}.
-      </Typography>
-    );
   }
 
   orderSummary(props) {
@@ -277,7 +265,7 @@ class Checkout extends React.Component {
                 Checkout
               </Typography>
             </Container>
-            <Container maxWidth='lg'>
+            <Container maxWidth='lg' style={{ minHeight: '100vh' }}>
               <Grid container>
                 <form onSubmit={this.handleSubmit}>
                   <AddressForm handleChange={this.handleChange}
@@ -297,7 +285,7 @@ class Checkout extends React.Component {
               </Grid>
             </Container>
           </ThemeProvider>
-          {this.Copyright()}
+          <Footer />
         </>
       );
     }
@@ -322,7 +310,7 @@ class Checkout extends React.Component {
               </Container>
             </form>
           </ThemeProvider>
-          {this.Copyright()}
+          <Footer/>
         </>
       );
     }
@@ -502,7 +490,7 @@ class AddressForm extends React.Component {
 class PaymentForm extends React.Component {
   render() {
     return (
-      <Container maxWidth='sm'>
+      <Container maxWidth='sm' style={{ minHeight: '100vh' }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }} >
           <Stepper sx={{ pt: '1rem', pb: '1.5rem' }} style={{ maxWidth: '550px' }} activeStep={1} alternativeLabel>
             {steps.map(label => (
