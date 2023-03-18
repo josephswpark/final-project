@@ -17,6 +17,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Footer from '../components/footer';
 
 const theme = createTheme({
   palette: {
@@ -263,6 +264,7 @@ export default class Cart extends React.Component {
               </Paper>
             </Grid>
           </Container>
+          <Footer/>
         </>
       );
     } else {
@@ -272,7 +274,7 @@ export default class Cart extends React.Component {
             <NavBar qty={shoe.length} onClick={this.openModal} onClose={this.closeModal} />
           </Paper>
 
-          <Container maxWidth='lg'>
+          <Container maxWidth='lg' >
             <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
               {this.CustomSeparator()}
             </Grid>
@@ -281,7 +283,7 @@ export default class Cart extends React.Component {
               <p style={{ marginLeft: '0.65rem', marginTop: '1.3rem' }}>{this.state.cartItems.length} item(s)</p>
             </div>
           </Container>
-          <Container maxWidth='lg'>
+          <Container maxWidth='lg' style={{ minHeight: '100vh' }}>
             <Grid container style={{ marginLeft: '0.5rem' }}>
               <Grid container spacing={2} justifyContent='space-evenly'>
                 <Grid item style={{ padding: 0, maxWidth: '550px' }}>
@@ -334,6 +336,7 @@ export default class Cart extends React.Component {
               </Grid>
             </Grid>
           </Container>
+          <Footer />
         </>
       );
     }
