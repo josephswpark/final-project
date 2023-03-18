@@ -22,18 +22,19 @@ export default function Footer() {
             SNEAKER WORLD
           </a><br/>
           <div style={{ paddingTop: '0.5rem' }}>
-            <a href="" ><InstagramIcon className='logo-button' /></a>
-            <a href="" style={{ marginLeft: '0.3rem' }}><TwitterIcon className='logo-button'/></a>
-            <a href="" style={{ marginLeft: '0.3rem' }}><FacebookIcon className='logo-button'/></a>
+            <a href="#" ><InstagramIcon className='logo-button' /></a>
+            <a href="#" style={{ marginLeft: '0.3rem' }}><TwitterIcon className='logo-button'/></a>
+            <a href="#" style={{ marginLeft: '0.3rem' }}><FacebookIcon className='logo-button'/></a>
             <a href='https://github.com/josephswpark' style={{ marginLeft: '0.3rem' }}><GitHubIcon className='logo-button'/></a>
           </div>
         </Grid>
         <Grid xs={6}>
           <ul className='footer-list'>
             <li style={{ marginBottom: '1rem' }}><a href='#products' className='footer'>Shop</a></li>
-            <li style={{ marginBottom: '1rem' }}><a href='#' className='footer'>About</a></li>
-            <li style={{ marginBottom: '1rem' }}><a href='#' className='footer'>Contact</a></li>
-            <li><a href='#shipping-info' className='footer'>Shipping & Returns</a></li>
+            <li style={{ marginBottom: '1rem' }}><a href='#error' className='footer'>About</a></li>
+            {/* change "href='#error'" to the page when done making it */}
+            <li style={{ marginBottom: '1rem' }}><a href='#error' className='footer'>Contact</a></li>
+            <li><a href='#error' className='footer'>Shipping & Returns</a></li>
           </ul>
 
         </Grid>

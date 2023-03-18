@@ -224,11 +224,11 @@ export default class Cart extends React.Component {
           <Paper style={styles.paperContainer}>
             <NavBar onClick={this.openModal} onClose={this.closeModal}/>
           </Paper>
-          <Container maxWidth='lg'>
+          <Container maxWidth='lg' style={{ minHeight: '100vh' }}>
             <Grid item xs={12} style={{ marginTop: '1.5rem', fontFamily: 'eczar', fontStyle: 'italic' }}>
               {this.CustomSeparator()}
             </Grid>
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex' }} >
               <h3>Bag</h3>
               <p style={{ marginLeft: '0.65rem', marginTop: '1.3rem' }}>{this.state.cartItems.length} item(s)</p>
             </div>
